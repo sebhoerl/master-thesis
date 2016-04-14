@@ -1,0 +1,48 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{placeins}
+
+\usepackage[T1]{fontenc}
+\usepackage[scaled=0.85]{beramono}
+
+\usepackage{xcolor}
+\newcommand\todo[1]{\texttt{\textcolor{blue}{\textbf{TODO} #1}}}
+
+\usepackage[round,authoryear,sectionbib]{natbib}
+\bibliographystyle{plainnat}
+
+\usepackage{setspace}
+
+\renewcommand\bibsection{\section{\refname}}
+\setlength{\parindent}{1cm}
+\onehalfspacing
+
+\title{Multi-level evaluation of autonomous vehicle using agent-based transport simulation for the case of Singapore}
+\author{
+    Sebastian Hörl
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\pagebreak
+
+\tableofcontents
+\pagebreak
+
+\input{chapters/1.introduction.tex} \FloatBarrier
+\input{chapters/2.perspectives.tex} \FloatBarrier
+\input{chapters/3.matsim.tex} \FloatBarrier
+\input{chapters/4.dynagent.tex} \FloatBarrier
+\input{chapters/5.basic.tex} \FloatBarrier
+\input{chapters/6.sioux.tex} \FloatBarrier
+
+\bibliography{references}
+
+\end{document}
