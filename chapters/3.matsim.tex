@@ -155,6 +155,10 @@ All these utility computations are done after all agents have been simulated for
 a whole day (in fact, usually 30h are used). This step in the MATSim framework is
 simply called the ``scoring'' phase.
 
+\todo{It would be better to explain the additional parameters further down
+in the chapter about the AV fleet model. Here, further explanations on how those parameters
+are usually measured and estimated would be more adequate.}
+
 \subsection{Evolutionary replanning}
 
 The last step in order to make all the agents ``learn'' more optimal plans which
@@ -220,7 +224,7 @@ a quite stable population-wide relaxed state is reached.
     \includegraphics[width=1.0\textwidth]{figures/scorestats.pdf}
     \caption{Typical progression of the agent scores throughout a MATSim simulation.
     ``Worst'' means that the plans with the worst scores from all the agents are taken
-    and averaged, the same applies for the other graphs. \todo{make a better graphic with a more clear relaxation}}
+    and averaged, the same applies for the other graphs. \todo{make a better graphic with a more clearer relaxation (simple corridor should be okay)}}
     \label{fig:scorestats}
 \end{figure}
 

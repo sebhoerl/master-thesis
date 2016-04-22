@@ -146,6 +146,35 @@ does a good job in decreasing the overall travel time.
     \label{fig:gridsize}
 \end{figure}
 
+Further improving the dispatching process, the routing has been parallelized. When
+the dispatcher is called one per iteration, all the assignments between autonomous
+taxi agents and passengers are cached to be processed while the network simulation
+of the next iteration is running. Only then, so after one iteration, the dispatcher
+waits for all running routing jobs to finish and notifies the agents. This way all
+the expensive routing through the network can be done in parallel to the Netsim.
+\Cref{fig:routers} shows the impact of adding this feature: While only applying
+one parallel router there is already a huge increase in computational performance
+compared to the serial processing of the routing tasks. As soon as more routers
+work concurrently, this performance is even improved. However, as usual there is
+the point where managing the parallelization adds more overhead to the simulation.
+For the given scenario a number of routers of $2$ seems to be a reasonable choice.
+
+The parallelization of the dispatcher could be pushed even further. Next to the
+routing the actual assignment is the other expensive component in the algorithm.
+However, it would probably be hard to parallelize, because concurrent workers
+would need to access the same grid structures. The overhead of managing which
+worker has access is likely to very fast add more overhead than improvement to
+the simulation. One could, however, put the whole assignment process as a serial
+procedure in parallel to the Netsim, as done with the routers. This could be a
+promising approach of pushing the performance of the simulation even further.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/routers.pdf}
+    \caption{\todo{todo}}
+    \label{fig:routers}
+\end{figure}
+
 \subsection{Distribution Algorithm}
 
 At the beginning of a day simulation MATSim all the $n$ available AVs must be placed
