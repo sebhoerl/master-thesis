@@ -51,18 +51,30 @@ parameters end implementational questions arise, that can be configured accordin
 \item[The Idle behaviour] for the basic model just means that the AV will stay at
 its last position. Future extensions could make use of parking facilities or do
 an intelligent repositioning to improve the overall performance of the service.
+
 \item[Pickup and Dropoff duration] need to be specified. In accordance with
 \todo{cite}, $t_{pickup} = 120s$ and $t_{dropoff} = 60s$ have been chosen. The time
 used for the pickup action will not be counted as waiting time (which, in turn,
 would be penalized through the marginal utility of waiting as described before).
-\item[The routing] of the legs of the AVs is done statically, as soon as a request
-is created. This means that AVs will not react dynamically to the traffic situation
-(e.g. if there are traffic jams). For the routing through the network a plain
+
+\item[The routing] of the legs of the AVs is done semi-dynamic, as soon as a
+request is issued. What this means is that only the traffic situation of the
+previous iteration is taken into account. During an iteration the average travel
+speeds for all network links are tracked in a number of time bins throughout the
+day and used in the next iteration. In order to smoothen the measurements and
+allow for a faster convergence of the scenario, the measured travel times are
+averaged with those of the previous iteration.
+For the routing through the network a plain
 Dijkstra algorithm is used, with the shortest path being the one with the shortest
-expected driving time with respect to the nomial traffic speeds on the links. This
+expected driving time with respect to the inferred travel speeds. This
 also means that the current traffic situation, which might slow down some links,
-is not taken into account. Those points could be future improvements of the
-implementation.
+is not taken into account directly, but only indirectly from previous knowledge.
+Parameters that are involved in the routing are the number of time bins per day
+and the interpolation factor when averageing over the previous iteration.
+\todo{Explain that this has been implemented due to overcongestion when too many
+AVs are used, which would take the exact same main routes. The averaging over
+previous iterations can also be explained further in terms of dynamical system
+/ random process properties, i.e. it is a stable AR(1) process.}
 \end{description}
 
 \begin{figure}
@@ -216,3 +228,40 @@ for the first testing purposes the population density is better suited, since a
 detailed investigation would need to be done if any results from the AV leg density
 come from the mode choice of the agents or of feedback behaviour within the algorithm
 itself.
+
+\subsection{Sensitivity Analysis}
+
+\todo{Ongoing. The follwing are just notes.}
+
+Idea is to find the general properties how the demand depends on the
+parameters. The idea is that there should be two limiting factors: The utility (depending
+on the cost of the AV, the equilibirum will find a certain value) and the supply (
+if utility is such good that the AVs go into saturation, the supply level should
+dominate the equilibirum).
+
+Some questions:
+
++ What are the utility values at which the system goes into saturation?
++ How does the supply effect the share of AVs?
+
+For the utility the effects should be quite clear. In some way, giving better
+utility to AVs should increase the AV share until it goes into saturation.
+
+For the supply the situation is a bit different. If there are no enough AVs it
+will be quite unattractive to use AVs, because one has to wait really long. So
+it is likely that there is a threshold, which defines the minimum supply in the
+system.
+
+Then again there should be an interplay between utility and supply, because
+if one has saturation at a certain utility and then increases the supply, again
+going into saturation there are less and less people who are \textit{not} using
+AVs, so the increase should have a parabolic shape, while increasing the utility
+when the system is not in saturation should show a logistic growth.
+
+In essence, what I'm trying to find out if there is a parametric bifurcation, that
+let's changes the eqilibirum dynamcis substantially...
+
+The prupose of all the sensitivity analysis is to get a bit more insight for the
+following operator model, because there the variables will be the cost per km
+for the operator and the price for the customer, as well as a price per car which
+depends on the supply. 

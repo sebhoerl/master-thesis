@@ -3,15 +3,12 @@
 
 The City of Sioux Falls in South Dakota has been a classical test case in transport
 research for more than four decades, being first mentioned in this context in
-\citet{Morlok1973}. In this tradition, a MATSim scenario for Sioux Falls has been
-introduced in \citet{Chakirov2014}, which is based on a number of prior publications.
-
-While none of the numerous implementations of the network demanded to be accurate
-and realistic with respect to the actual City of Sioux Falls, they were merely aiming
+\citet{Morlok1973}. While none of the numerous implementations of the network are intended to be accurate
+and realistic with respect to the actual City of Sioux Falls, they are merely aiming
 towards providing downscaled, computationally tractable test cases for transport
-planning problems.
+planning and simulation problems.
 
-In \citet{Chakirov2014} the scenario (``Sioux-14'', \cref{sioux14}) has been
+In \citet{Chakirov2014} the scenario (``Sioux-14'', \cref{fig:sioux14}) has been
 adapted to the MATSim framework. A sparse street network, which is computationally
 easy to handle by the simulation, was introduced. It consists of 27 nodes and 76 links,
 representing the main arterial roads of the city, split further down into
@@ -176,7 +173,7 @@ the center where the green line uses the same roads as the red one, the same
 locations should be chosen. This constraint usually interfered with the approaches
 that took into account the first constraint (especially in the center for the
 blue line).
-\item Finally, the Sioux-14 locations where completely off the network in Sioux-16,
+\item Finally, some of the Sioux-14 locations where completely off the network in Sioux-16,
 for instance for the red line, where one can see a bend in the diagonal connection,
 which was modelled as a straight line in Sioux-14.
 \end{itemize}
@@ -223,3 +220,89 @@ number of splitted links during the processing of the public transport.
     \caption{\todo{todo}}
     \label{fig:pt_network}
 \end{figure}
+
+\subsection{Scenario Calibration}
+
+The Sioux-14 network features artificially chosen link capacities, which are based
+on a minimum of two and a maximum of three lanes per link, where three have only
+be chosen for a fraction of highway links \citep{Chakirov2014}. While the added
+minor streets in Sioux-16 should not make too much of an impact in overall
+capacity, the highways and main arterials of the real network usually feature
+greater capacity (for instance by providing \textit{four} lanes on the western highway).
+
+Looking at \cref{fig:sioux_times}, it can be seen that the travel time (of cars) in
+the new network is lower (red), compared to Sioux-16 (black). This effect can partly
+be explained by the increased capacity, but also by the multitude of new options
+to choose the most effective route for a trip through the fine-grained network. In
+fact, the route choice might be the major influence when comparing with the data
+from \cref{fig:sioux_speeds}. There the decrease in link speeds (relative to the freespeed) can be seen, which
+is quite similar, indicating a comparable amount of congestion in the network.
+
+Depending on how important the comparability to Sioux-14 in a specific scenario
+is and what time of the day should be compared, it might be beneficial to adjust
+the flow capacity of the network\footnote{In MATSim, this can be easily done
+in the Mobsim configuration, e.g. \texttt{qsim.flowCapacityFactor} for QSim}:
+In terms of travel times a scaling of 50\% would resemble the afternoon peek
+way better than the 100\% version, while the morning peek would best be recovered
+by a value in between (\cref{fig:sioux_times}). A similar situation arises for the
+link speeds in \cref{fig:sioux_speeds}, where a value of 50\% is better suited for
+comparing the morning peak, while the 100\% scaling creates more comparable
+results in the evening.
+
+Furthermore, in terms of link speeds, it can be seen that the Sioux-16 scenario
+features less congestion during the off-peak hours due to the possibility of
+distributing trips all over the network.
+
+A comparison of the scenarios in terms of average travel times, distances and more
+shares can be found in \cref{tab:sioux}. What can be seen is that averaged over
+the whole day, values stay roughly the same, with the biggest differences being
+present in car traffic. There, especially the decrease in travel distance is
+noticable, but expected, since more direct routes can be taken.
+For public transport the result of Sioux-16 are similar to Sioux-14, which is
+an indicator that the network is strongly resembling the former version.
+
+In terms of mode shares it is interesting to see that public transport does not
+see a big difference between Sioux-14 and Sioux-16 (100\%), but that 3\% of agents
+switch to using a car from walking. This effect can also be explained with the
+better car accessibility of destinations, where long detours would be needed in
+the sparse network.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/sioux_times.pdf}
+    \caption{Comparison of the average duration of car trips by day time in Sioux-14 and Sioux-16 with 50\% and 100\% flow capacity.}
+    \label{fig:sioux_times}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/sioux_speeds.pdf}
+    \caption{Comparison of the decrease of link speeds by day time in Sioux-14 and Sioux-16 with 50\% and 100\% flow capacity.}
+    \label{fig:sioux_speeds}
+\end{figure}
+
+
+\begin{table}[]
+\centering
+\caption{Comparison of Sioux-14 and Sioux-16 in terms of travel measures}
+\label{tab:sioux}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Scenario}                  & \multicolumn{1}{c}{Sioux-14} & \multicolumn{1}{c}{Sioux-16} & \multicolumn{1}{c}{Sioux-16} & \multicolumn{1}{c}{Sioux-16} \\
+Flow Capacity                      & \multicolumn{1}{c}{}         & \multicolumn{1}{c}{50\%}     & \multicolumn{1}{c}{70\%}     & \multicolumn{1}{c}{100\%}    \\ \midrule
+\textbf{Travel Distances {[}km{]}} & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Car                                & 2.60                         & 1.83                         & 1.80                         & 1.79                         \\
+Walking                            & 1.33                         & 1.29                         & 1.27                         & 1.26                         \\
+Public Transport                   & 3.70                         & 3.82                         & 3.86                         & 3.89                         \\
+Transit Walk                       & 0.59                         & 0.53                         & 0.53                         & 0.53                         \\\midrule
+\textbf{Travel Times {[}mm:ss{]}}  & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Car                                & 09:00                        & 08:39                        & 07:01                        & 05:12                        \\
+Walking                            & 26:35                        & 25:48                        & 25:19                        & 25:08                        \\
+Public Transport                   & 31:20                        & 29:05                        & 28:32                        & 28:14                        \\
+Transit Walk                       & 10:45                        & 09:07                        & 09:07                        & 09:06                        \\\midrule
+\textbf{Mode Shares}               & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         & \multicolumn{1}{l}{}         \\
+Car                                & 63.52\%                      & 63.67\%                      & 65.26\%                      & 66.13\%                      \\
+Walking                            & 9.44\%                       & 7.41\%                       & 6.72\%                       & 6.48\%                       \\
+Public Transport                   & 27.04\%                      & 28.92\%                      & 28.01\%                      & 27.39\%                      \\ \bottomrule
+\end{tabular}
+\end{table}
