@@ -56,25 +56,6 @@ an intelligent repositioning to improve the overall performance of the service.
 \todo{cite}, $t_{pickup} = 120s$ and $t_{dropoff} = 60s$ have been chosen. The time
 used for the pickup action will not be counted as waiting time (which, in turn,
 would be penalized through the marginal utility of waiting as described before).
-
-\item[The routing] of the legs of the AVs is done semi-dynamic, as soon as a
-request is issued. What this means is that only the traffic situation of the
-previous iteration is taken into account. During an iteration the average travel
-speeds for all network links are tracked in a number of time bins throughout the
-day and used in the next iteration. In order to smoothen the measurements and
-allow for a faster convergence of the scenario, the measured travel times are
-averaged with those of the previous iteration.
-For the routing through the network a plain
-Dijkstra algorithm is used, with the shortest path being the one with the shortest
-expected driving time with respect to the inferred travel speeds. This
-also means that the current traffic situation, which might slow down some links,
-is not taken into account directly, but only indirectly from previous knowledge.
-Parameters that are involved in the routing are the number of time bins per day
-and the interpolation factor when averageing over the previous iteration.
-\todo{Explain that this has been implemented due to overcongestion when too many
-AVs are used, which would take the exact same main routes. The averaging over
-previous iterations can also be explained further in terms of dynamical system
-/ random process properties, i.e. it is a stable AR(1) process.}
 \end{description}
 
 \begin{figure}
@@ -83,6 +64,48 @@ previous iterations can also be explained further in terms of dynamical system
     \caption{State chart of an AV agent. Activity states are displyed in green, while Leg states are yellow.}
     \label{fig:avstates}
 \end{figure}
+
+\subsection{Distribution Algorithm}
+
+At the beginning of a day simulation MATSim all the $n$ available AVs must be placed
+somewhere in the network. Two simple distribution algorithms have been implemented
+for the purpose of testing in this thesis.
+
+The first one is \textbf{Random Distribution}. Here $n$ links are chosen randomly
+from all available network links. While this is an easy distribution strategy for testing,
+it create a quite unrealistic scenario. Obviously, in a real AV service, vehicles
+would be relcoated over night, such that they can serve as many passengers as
+possible during the morning peek.
+
+Therefore a more elaborate distribution strategy has been implemented, which should
+lead to more realistic results. Basically one can define a density over the network,
+such that every link has a certain probability to get an AV assigned. Then, in $n$
+steps, the $n$ available AVs are added to a link dependent on the assignment
+probability.
+
+This probability density can be based on many factors. The ones that are implemented
+for this thesis are:
+
+\begin{description}
+\item[Population density] What is measured here is the population density in terms of
+how many people are havingtheir ``home'' activity on a certain link.
+\item[AV commuter density] Here for each link it is counted how many people will
+have chosen the AV mode for their first leg, i.e. the one that is starting from home.
+\end{description}
+
+While the prior one is static, the latter on is dynamic in the sense that for every
+iteration in the evolutionary learning, the density will change. So while the
+population-density based distribution is a fixed constraint, the latter one captures
+the factor of availability. For instance, if there are many agents using AVs in a
+certain area, the availability is very high, and thus more people might be inclined
+to use it. On the other hand, if availability is low in an area, it might lead to
+longer waiting times and people are less likely to use AVs.
+
+While it might be interesting to observe different patterns of availability,
+for the first testing purposes the population density is better suited, since a
+detailed investigation would need to be done if any results from the AV leg density
+come from the mode choice of the agents or of feedback behaviour within the algorithm
+itself.
 
 \subsection{Dispatcher Algorithm}
 
@@ -187,49 +210,112 @@ promising approach of pushing the performance of the simulation even further.
     \label{fig:routers}
 \end{figure}
 
-\subsection{Distribution Algorithm}
+\subsection{Routing Algorithm}
 
-At the beginning of a day simulation MATSim all the $n$ available AVs must be placed
-somewhere in the network. Two simple distribution algorithms have been implemented
-for the purpose of testing in this thesis.
+The easiest most simple option for routing autonomous vehicles in the model would
+be to solve a Dijkstra routing problem through the street network, while minimizing
+the expected travel time based on the freespeed values of the links. This strategy
+works well for small shares of AVs, because they have not a big impact on the overall
+traffic situation.
+However, when reaching high shares of AVs one (in simulation as in reality) faces
+the problem that the routing cannot be done on the fastest route for most of the
+people, as this generates too much congestion. By finding the shortest path in terms
+of freespeed, one artificially creates bottlenecks, because all AVs are routed
+through the same arterials. This is already an interesting result that can be moved
+directly to reality: As soon as an AV operator gains such a high share that he
+directly impacts the traffic situation, he must also make sure to relax congestion
+in the network, otherwise the service is creating too much of a delay.
 
-The first one is \textbf{Random Distribution}. Here $n$ links are chosen randomly
-from all available network links. While this is an easy distribution strategy for testing,
-it create a quite unrealistic scenario. Obviously, in a real AV service, vehicles
-would be relcoated over night, such that they can serve as many passengers as
-possible during the morning peek.
+In the simulation this got apparent when, for certain shares, huge numbers of
+agents could not finish their plans, because all arterials were cluttered by
+queueing autonomous taxis. While finding an ``intelligent'' congestion redistribution strategy is a whole
+different topic \todo{There are probably interesting publciations, have a look
+for that}, for the purpose of simulating AVs in this thesis a rather static approach
+is taken. The main idea is to add stochasticity to the Dijkstra process, thus creating
+slightly perturbed routes. What needs to be answered for using this approach is,
+which magnitude those perturbations should have. In order to solve this problem,
+the Sioux-16 baseline scenario has been examined. The 30h day has been divided
+into $N=720$ bins ($2min$ each) and for each find the relative decrease in speed for all link
+passages starting in each bin has been computed:
 
-Therefore a more elaborate distribution strategy has been implemented, which should
-lead to more realistic results. Basically one can define a density over the network,
-such that every link has a certain probability to get an AV assigned. Then, in $n$
-steps, the $n$ available AVs are added to a link dependent on the assignment
-probability.
+\begin{equation}
+r_{i,j} = \sum_{j=1}^{n_i} \frac{v_{i,j,freespeed} - v_{i,j,simulated}}{v_{i,j,freespeed}}
+\end{equation}
 
-This probability density can be based on many factors. The ones that are implemented
-for this thesis are:
+Here $n_i$ is the number of link passages (all agents and all links) that occured
+in bin number $i$ and $r_{i,j}$ is the relative decrease of speed in each bin for
+each passage.
 
-\begin{description}
-\item[Population density] What is measured here is the population density in terms of
-how many people are havingtheir ``home'' activity on a certain link.
-\item[AV commuter density] Here for each link it is counted how many people will
-have chosen the AV mode for their first leg, i.e. the one that is starting from home.
-\end{description}
+As can be seen in \cref{fig:speeddecdist}, the distribution of decreases in travel
+speeds of the network links can approximated using a Gamma distribution. The outliers,
+which can be seen on the right, are those cases where there is a lot congestion in
+peak hours. Because those are exactly the cases that one wants to avoid here, they
+are ommitted in the following steps.
+The assumption of a Gamma-distribution is wholly motivated by the shape of the histogram,
+performing an educated derivation of the distribution shape would be an interesting
+investigation, which is out of the scope of this thesis though.
 
-While the prior one is static, the latter on is dynamic in the sense that for every
-iteration in the evolutionary learning, the density will change. So while the
-population-density based distribution is a fixed constraint, the latter one captures
-the factor of availability. For instance, if there are many agents using AVs in a
-certain area, the availability is very high, and thus more people might be inclined
-to use it. On the other hand, if availability is low in an area, it might lead to
-longer waiting times and people are less likely to use AVs.
+A Gamma distribtion is defined by a shape parameter $k$ and a scale parameter $\theta$. For
+all bins in the baseline scenario, the respective parameters have been obtained using
+the MLE estimator for $\theta$ and a Newton approximation for $k$ as described in
+\todo{add citation}. \Cref{fig:randommodel} shows the parameter values for each bin on top,
+after they have been smoothed using a moving average filter of length $20$. Also,
+for the times before roughly 5am and after 10pm, average parameter values over the
+off-peak hours in the middle of the day have been inserted due to a lack of sufficient
+data for fitting the speed decreases in these outer areas.
 
-While it might be interesting to observe different patterns of availability,
-for the first testing purposes the population density is better suited, since a
-detailed investigation would need to be done if any results from the AV leg density
-come from the mode choice of the agents or of feedback behaviour within the algorithm
-itself.
+Also shown in \cref{fig:randommodel} (on the bottom) is the mean of the speed decrease at each time of the
+day, framed by the $10\%$ and $90\%$ quantiles, now instead of simulation results based on the statistical model.
+It can be seen that due to the Gamma model, the range of probable decreases is high in peak hours, up to 70\%,
+while the mean still stays relatively constant over the whole day.
+
+The final travel speed for the router can now be described as a random variable:
+
+\begin{equation}
+    V_{i,j,routing} = v_{i,j,freespeed} \cdot (1 + R_i)
+\end{equation}
+
+with $R_i \sim \Gamma(k_i, \theta_i)$ being Gamma-distributed for each bin.
+
+The overall effect of this model is then as follows: There is a certain increase
+in travel time expected for each link, which depends on its freespeed and the time
+of the day. However, especially in peak hours, when the bottlenecks would be a
+critical problem, more variation is added to the expected increases in travel time
+and thus a better variation in the routing is reached. In each case, the expected
+increases are founded on the actual network characteristics of the Sioux-16 network.
+
+What has to be kept in mind is, that this effectively puts a boundary on the
+possible number of AVs in the simulation. While the presented approach helps to
+avoid too much congestion for a wide range of AV shares, it doesn't perform an
+actual intelligent redistribution of congestion in the network. So because of
+too much congestion there will be a limit of AVs that can be used, since waiting
+times and travel times will get to expensive. This equilibrium generally should
+be lower than the actual ``network congestion capacity'' for the theoretical case
+of globally optimally routed AVs.
+
+In the same sense it has to be acknowledged that no investigation has been done
+to find out how close the proposed model is operating to a theoretical optimum, so
+the following results in this thesis have to be understood under the assumption
+of this stochastic routing approach and might not represent the best possible
+solution.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/speeddecdist.pdf}
+    \caption{\todo{todo}}
+    \label{fig:speeddecdist}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/randommodel.pdf}
+    \caption{\todo{todo}}
+    \label{fig:randommodel}
+\end{figure}
 
 \subsection{Sensitivity Analysis}
+
+three domniating factors: av supply, utility, network capacity
 
 \todo{Ongoing. The follwing are just notes.}
 
@@ -264,4 +350,4 @@ let's changes the eqilibirum dynamcis substantially...
 The prupose of all the sensitivity analysis is to get a bit more insight for the
 following operator model, because there the variables will be the cost per km
 for the operator and the price for the customer, as well as a price per car which
-depends on the supply. 
+depends on the supply.
