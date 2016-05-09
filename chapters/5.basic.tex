@@ -267,7 +267,8 @@ data for fitting the speed decreases in these outer areas.
 Also shown in \cref{fig:randommodel} (on the bottom) is the mean of the speed decrease at each time of the
 day, framed by the $10\%$ and $90\%$ quantiles, now instead of simulation results based on the statistical model.
 It can be seen that due to the Gamma model, the range of probable decreases is high in peak hours, up to 70\%,
-while the mean still stays relatively constant over the whole day.
+while the 10\% stays quite constant during the day. The graph of the mean increase suggests that the presented
+model is a reasonable approximation, which qualitatively makes sense.
 
 The final travel speed for the router can now be described as a random variable:
 
@@ -312,42 +313,3 @@ solution.
     \caption{\todo{todo}}
     \label{fig:randommodel}
 \end{figure}
-
-\subsection{Sensitivity Analysis}
-
-three domniating factors: av supply, utility, network capacity
-
-\todo{Ongoing. The follwing are just notes.}
-
-Idea is to find the general properties how the demand depends on the
-parameters. The idea is that there should be two limiting factors: The utility (depending
-on the cost of the AV, the equilibirum will find a certain value) and the supply (
-if utility is such good that the AVs go into saturation, the supply level should
-dominate the equilibirum).
-
-Some questions:
-
-+ What are the utility values at which the system goes into saturation?
-+ How does the supply effect the share of AVs?
-
-For the utility the effects should be quite clear. In some way, giving better
-utility to AVs should increase the AV share until it goes into saturation.
-
-For the supply the situation is a bit different. If there are no enough AVs it
-will be quite unattractive to use AVs, because one has to wait really long. So
-it is likely that there is a threshold, which defines the minimum supply in the
-system.
-
-Then again there should be an interplay between utility and supply, because
-if one has saturation at a certain utility and then increases the supply, again
-going into saturation there are less and less people who are \textit{not} using
-AVs, so the increase should have a parabolic shape, while increasing the utility
-when the system is not in saturation should show a logistic growth.
-
-In essence, what I'm trying to find out if there is a parametric bifurcation, that
-let's changes the eqilibirum dynamcis substantially...
-
-The prupose of all the sensitivity analysis is to get a bit more insight for the
-following operator model, because there the variables will be the cost per km
-for the operator and the price for the customer, as well as a price per car which
-depends on the supply.

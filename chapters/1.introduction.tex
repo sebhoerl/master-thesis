@@ -15,3 +15,96 @@
 \end{itemize}
 
 \todo{Introduction}
+
+Autonomous vehicles are expected to have great impact on how the traffic situation
+on the road will look like in the not so far future. During the last years autonomous
+vehicle technology took great leaps forward, examples being Google's self-driving cars
+\todo{cite} or Tesla's latest software updated on semi-autonomous driving on highways \todo{cite}.
+Furthermore, renowned car manufacturers such as Audi recently joined the competition
+and tests in real-world conditions are fostered all over the world as in Volvo's
+DriveMe project on the highways of the city of Gothenburg, autonomous transport pods
+in the city of Milton Keynes \todo{cite, cite}.
+
+Especially big cities like Singapore could gain a lot from autonomous car technology
+be it from privately owned cars to publicly owned services. A floating fleet of
+AVs could have a drastical impact on land usage, reducing the place of parking
+space needed in the urban environment, and improve road safety, access to transportation,
+congestion and emissions at the same time. \todo{cite}
+From from a user perspective, shared autonomous taxis could solve the classic ``last mile problem'' where AVs could
+bridge the transport gap from the closest public transport facility to the homes
+of the people. As soon as a certain supply of AVs is reached, prices are predicted
+to be lower and more evenly distributed compared to current pricing schemes for
+public services \todo{cite}.
+
+On the other side, with the adaptation of autonomous transport, fundamental moral
+problems \todo{cite} need to be solved and related questions in liability and
+ownership needs to be answered. In general, predicting how and when autonomous
+vehicles will be on the roads is a highly complex problem and most of the proclaimed
+benefits can easily be defeated due to a lack of reliable data.
+
+To give an example, one of these benefits is having less congestion \todo{cite}. However,
+it is claimed that in order to make a passenger comfortable in a self-driving car,
+significantly smaller accelerations and decellerations are allowed and thus the
+overall movements on the roads will be slowed down \todo{cite}. Having only assumptions
+on how many people would take part in shared AV services, replacing a huge share of
+contemporary cars with autonomous ones could actually increase overall congestion.
+
+In consequence, while the technological development in autonomous driving already
+came a long way, there is still a lot of demand for research on an upper level, looking
+at the overall economic and societal picture. While numerous efforts have been made
+in predicting the usefulness of AVs for a city in terms of AV supply by, for
+instance, answering the question how many shared AVs would be needed to serve the
+existing demand \todo{cite}, less results are available on how the new travel
+mode would interact with existing travel options and how customer preferences
+influence the mode choice.
+
+The agent- and activity-based traffic simulation framework MATSim allows for such
+research by taking into account assumed customer preferences and letting the people
+interact with a newly added means of transportation. Consequently, this allows one
+to predict the shares of autonomous vehicle rides for certain levels of acceptance
+for the technology, different pricing schemes and different levels of availability.
+The framework has been successfully used in a range of studies from taxi services
+in Berlin and Barcelona up to the simulation of the whole transport network of
+Singapore. While the framework allows for a quite precise prediction of traffic
+flows for scenarios involving car traffic and public transport, it yet does not
+allow the simulation of dynamically acting autonomous vehicles.
+
+Therefore the purpose of this thesis will be to implement means of simulating autonomous
+taxis within the MATSim framework. Major challenges will be to account for an
+accptable simulation speed while keeping the dynamic detail, which is needed in
+order to simulate intelligently acting taxi fleets and to keep the added functionality
+as versatile and extendable as possible in order to make it possible to gain
+research results on a multitude of factors that influence the adaptation of
+autonomous vehicles.
+
+This, however, also means that in the scope of this thesis the basic model of
+autonomous vehicles, which are transporting one passengers, is developed, while
+many interesting aspects such as shared AVs, AVs for the purpose of feeding
+public transport facilities or simulating a refuel/recharging infrastructure can
+be subject of future research. Also, since the model relies on data on how likely
+people are to use autonomous technology, only vague predictions can be made at
+the moment, based on current predictions. However, more and more data on customer
+preferences, actual experiences of AV technology and pricing information will
+become available over the the next years, leading the model to give a more accurate
+and reliable look into the future.
+
+Given those data sets, the simulation developed in the thesis has the potential
+to act as a valuable tool in transport planning and urban development. It will give
+great aid in the implementation of the needed infrastructure, the development of
+pinpointed transport solutions and a restructuring of the present traffic network
+to account for the adaptation of autonomous vehicles.
+
+The thesis at hand is structured in four main parts: Chapter 2 will introduce how
+traffic simulation is performed in the MATSim framework and highlight the aspects
+that are important to know for the implementation of autonomous vehicles. Chapter 3,
+as another prerequisite for setting up a meaningful simulation, covers the adaptation
+of a readily available MATSim traffic scenario to the increased network resolution,
+which is needed here. In Chapters 4 and 5 the technical implementation
+of the AV simulation will be explained in detail on two abstraction layers, first
+introducing a new framework for simulating dynamically acting agents in MATSim
+and then creating a model of autonomous taxis based on that. Then, in Chapter 6
+the model will be tested with a variety of parameters configurations, giving
+insights on the general working of the model and predictions of AV usage in the
+artificial Sioux Falls test scenario. Finally, Chapter 7 will give an outlook on
+a multitude of possible extensions of the model and further research questions that
+can be answered using the model at hand.
