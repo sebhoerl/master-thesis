@@ -1,73 +1,59 @@
 \section{Introduction}
 
-\begin{itemize}
-
-\item General introduction, MATSim is suitable for simulating autonomous vehicles \citep{Boesch2015} etc ...
-
-\item Sovles last-mile problem \citep{Litman2014}
-
-\item Interesting previous studies \citep{Fagnant2014, ITF2014}
-
-\item Progress \citep{Silberg2013, SchoettleBrandon2014}
-
-\item Singapore \citep{Kheong2014}
-
-\end{itemize}
-
-\todo{Introduction}
-
 Autonomous vehicles are expected to have great impact on how the traffic situation
 on the road will look like in the not so far future. During the last years autonomous
 vehicle technology took great leaps forward, examples being Google's self-driving cars
-\todo{cite} or Tesla's latest software updated on semi-autonomous driving on highways \todo{cite}.
+\citep{Google2016} or Tesla's latest software updated on autonomous parking functionality \citep{Tesla2016}.
 Furthermore, renowned car manufacturers such as Audi recently joined the competition
 and tests in real-world conditions are fostered all over the world as in Volvo's
-DriveMe project on the highways of the city of Gothenburg, autonomous transport pods
-in the city of Milton Keynes \todo{cite, cite}.
+DriveMe \citep{Gothenburg2016} project on the highways of Gothenburg or in autonomous transport pods
+in the city of Milton Keynes \citep{MiltonKeynes2016}.
 
 Especially big cities like Singapore could gain a lot from autonomous car technology
 be it from privately owned cars to publicly owned services. A floating fleet of
 AVs could have a drastical impact on land usage, reducing the place of parking
 space needed in the urban environment, and improve road safety, access to transportation,
-congestion and emissions at the same time. \todo{cite}
+congestion and emissions at the same time \citep{Kheong2014}.
 From from a user perspective, shared autonomous taxis could solve the classic ``last mile problem'' where AVs could
 bridge the transport gap from the closest public transport facility to the homes
-of the people. As soon as a certain supply of AVs is reached, prices are predicted
+of the people \citep{Litman2014}. As soon as a certain supply of AVs is reached, prices are predicted
 to be lower and more evenly distributed compared to current pricing schemes for
-public services \todo{cite}.
+public services \citep{Chen16}.
 
 On the other side, with the adaptation of autonomous transport, fundamental moral
-problems \todo{cite} need to be solved and related questions in liability and
+problems \citep{Hevelke2015a} need to be solved and related questions in liability and
 ownership needs to be answered. In general, predicting how and when autonomous
 vehicles will be on the roads is a highly complex problem and most of the proclaimed
 benefits can easily be defeated due to a lack of reliable data.
 
-To give an example, one of these benefits is having less congestion \todo{cite}. However,
+To give an example, one of these benefits is having less congestion \citep{Litman2014}. However,
 it is claimed that in order to make a passenger comfortable in a self-driving car,
 significantly smaller accelerations and decellerations are allowed and thus the
-overall movements on the roads will be slowed down \todo{cite}. Having only assumptions
+overall movements on the roads will be slowed down \citep{LeVine2015}. Having only assumptions
 on how many people would take part in shared AV services, replacing a huge share of
 contemporary cars with autonomous ones could actually increase overall congestion.
 
 In consequence, while the technological development in autonomous driving already
 came a long way, there is still a lot of demand for research on an upper level, looking
-at the overall economic and societal picture. While numerous efforts have been made
+at the overall economic and societal picture. A valuable tool for doing this is the
+use of traffic simulation \citep{Fagnant2014, ITF2014}. While numerous efforts have been made
 in predicting the usefulness of AVs for a city in terms of AV supply by, for
 instance, answering the question how many shared AVs would be needed to serve the
-existing demand \todo{cite}, less results are available on how the new travel
+existing demand \citep{Bosch2015}, less results are available on how the new travel
 mode would interact with existing travel options and how customer preferences
 influence the mode choice.
 
-The agent- and activity-based traffic simulation framework MATSim allows for such
-research by taking into account assumed customer preferences and letting the people
+The agent- and activity-based traffic simulation framework MATSim \citep{Horni2015} allows for such
+research \citep{Boesch2015} by taking into account assumed customer preferences and letting the people
 interact with a newly added means of transportation. Consequently, this allows one
 to predict the shares of autonomous vehicle rides for certain levels of acceptance
 for the technology, different pricing schemes and different levels of availability.
-The framework has been successfully used in a range of studies from taxi services
-in Berlin and Barcelona up to the simulation of the whole transport network of
-Singapore. While the framework allows for a quite precise prediction of traffic
+The framework has been successfully used in a range of studies from autonomous taxi services
+in Berlin and Barcelona \citep{Bischoff2016} up to the simulation of the whole transport network of
+Singapore \citep{Erath2014}. While the framework allows for a quite precise prediction of traffic
 flows for scenarios involving car traffic and public transport, it yet does not
-allow the simulation of dynamically acting autonomous vehicles.
+allow the simulation of dynamically acting autonomous vehicles embedded in the
+overall traffic situation.
 
 Therefore the purpose of this thesis will be to implement means of simulating autonomous
 taxis within the MATSim framework. Major challenges will be to account for an
@@ -83,8 +69,8 @@ many interesting aspects such as shared AVs, AVs for the purpose of feeding
 public transport facilities or simulating a refuel/recharging infrastructure can
 be subject of future research. Also, since the model relies on data on how likely
 people are to use autonomous technology, only vague predictions can be made at
-the moment, based on current predictions. However, more and more data on customer
-preferences, actual experiences of AV technology and pricing information will
+the moment, based on current assumptions \citep{Silberg2013, SchoettleBrandon2014}.
+However, more and more data on customer preferences, actual experiences of AV technology and pricing information will
 become available over the the next years, leading the model to give a more accurate
 and reliable look into the future.
 
