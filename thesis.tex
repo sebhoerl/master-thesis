@@ -10,6 +10,7 @@
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{pdfpages}
+\usepackage{rotating}
 
 \usepackage[T1]{fontenc}
 \usepackage[scaled=0.85]{beramono}
@@ -21,6 +22,11 @@
 \bibliographystyle{plainnat}
 
 \usepackage{setspace}
+
+\Crefname{section}{Chapter}{Chapters}
+\Crefname{subsection}{Chapter}{Chapters}
+\crefname{section}{chapter}{chapters}
+\crefname{subsection}{chapter}{chapters}
 
 \renewcommand\bibsection{\section{\refname}}
 \setlength{\parindent}{0cm}
@@ -61,7 +67,7 @@
 
 \pagenumbering{arabic}
 
-\input{chapters/1.introduction.tex} \FloatBarrier \pagebreak
+\input{chapters/1.introduction.tex}  \pagebreak \FloatBarrier
 \input{chapters/2.matsim.tex} \FloatBarrier \pagebreak
 \input{chapters/3.sioux.tex} \FloatBarrier \pagebreak
 \input{chapters/4.dynagent.tex} \FloatBarrier \pagebreak
