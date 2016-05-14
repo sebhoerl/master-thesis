@@ -1,9 +1,9 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper,twoside]{article}
 \usepackage[a4paper, top=3.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
 \usepackage[utf8x]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{hyperref}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
 \usepackage{cleveref}
 \usepackage{placeins}
 \usepackage{caption}
@@ -47,33 +47,35 @@
 %\maketitle
 \includepdf[pages={1}]{cover.pdf}
 \pagebreak
+\thispagestyle{empty}
+\pagebreak
+\cleardoublepage
 
 \pagenumbering{roman}
 
-\tableofcontents
-\pagebreak
+\tableofcontents \cleardoublepage
 
-\section*{Acknowledgements}
-\pagebreak
+%\section*{Acknowledgements}
+%\cleardoublepage
 
-\section*{Abstract}
-\pagebreak
+%\section*{Abstract}
+%\cleardoublepage
 
-\section*{Kurzfassung}
-\pagebreak
+%\section*{Kurzfassung}
+%\cleardoublepage
 
-\section*{Abstrakt}
-\pagebreak
+%\section*{Abstrakt}
+%\cleardoublepage
 
 \pagenumbering{arabic}
 
-\input{chapters/1.introduction.tex}  \pagebreak \FloatBarrier
-\input{chapters/2.matsim.tex} \FloatBarrier \pagebreak
-\input{chapters/3.sioux.tex} \FloatBarrier \pagebreak
-\input{chapters/4.dynagent.tex} \FloatBarrier \pagebreak
-\input{chapters/5.basic.tex} \FloatBarrier \pagebreak
-\input{chapters/6.results.tex} \FloatBarrier \pagebreak
-\input{chapters/7.outlook.tex} \FloatBarrier \pagebreak
+\input{chapters/1.introduction.tex} \FloatBarrier \cleardoublepage
+\input{chapters/2.matsim.tex} \FloatBarrier \cleardoublepage
+\input{chapters/3.sioux.tex} \FloatBarrier \cleardoublepage
+\input{chapters/4.dynagent.tex} \FloatBarrier \cleardoublepage
+\input{chapters/5.basic.tex} \FloatBarrier \cleardoublepage
+\input{chapters/6.results.tex} \FloatBarrier \cleardoublepage
+\input{chapters/7.outlook.tex} \FloatBarrier \cleardoublepage
 
 \bibliography{references}
 
