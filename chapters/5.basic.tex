@@ -395,6 +395,7 @@ increases are founded on the actual network characteristics of the Sioux-16 netw
 \end{figure}
 
 \subsubsection{Performance Measures}
+\label{sec:routingperf}
 
 Basic tests of the AV taxi fleet model without the evolutionary replanning have been performed to test the
 performance of the routing algorithms. For that purpose, the scenario has been
@@ -486,4 +487,47 @@ model.
     \caption{Comparison of different routing algorithms in terms of average travel time with a fixed share of 70\% of car users in the population using AVs.
     Dotted lines show areas where agents were not able to finish their plans during the 30h simulation period.}
     \label{fig:routing_constrained}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{Static Trip Replacement}
+\label{sec:replacement}
+
+From the data for the stochastic routing, it was possible to find a structured
+dependency of the number of available AVs and the number of replaced cars in
+terms of the waiting time for passengers without performing any additional measurements.
+The result is presented in \cref{fig:replacementwaiting}. There, the existing data
+points are depicted as crosses, while all combinations with an average passenger
+waiting time of less than 10min have been highlighted. A pareto front over the
+existing measurements has been constructed. So in the case of a bare replacement
+of car trips by AV trips, one can see that in order to replace 40\% of the car fleet,
+10,000 AVs are necessary to reach the desired waiting time, which is only 15\% of
+the cars in the baseline scenario. So in total one would be left with a total car and
+av fleet size of 75\%. In the case of a replacement of 70\% of private cars with
+AVs, one would need to convert 30\% of vehicles to AVs, which would yield a
+total fleet size of 60\%.
+
+Furthermore it should be mentioned, that taking the average as a waiting time
+threshold might yield misleading results, i.e. if the distribution is heavily
+biased towards low waiting times. Experiments with using quantile functions instead
+of the average showed that in fact the opposite case is observed here. The shown
+average coincides quite accurately with the 80\% quantile, thus yielding an answer
+to the more solid question: How many AVs are needed to replace a certain percentage
+of the initial car fleet if 80\% of the waiting times should be less than 10
+minutes.
+
+These results are a first indicator of the performance of the model, but of course
+lack the flexibility of the evolutionary replanning. By letting agents alter their
+departure times the demand situation should become more relaxed and therefore
+waiting times should decrease. This, in turn would mean that the displayed front
+would decrease in slope. The next section will cover the results gained from the
+combined simulation framework, where all components are added together.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/replacementwaiting.pdf}
+    \caption{Dependency of the number of available AVs and the number of replaced
+    cars. The crosses indicate distinct measurements; the highlighted ones yield
+    an average passenger waiting time of less than 10 minutes.}
+    \label{fig:replacementwaiting}
 \end{figure}

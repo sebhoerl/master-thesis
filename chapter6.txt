@@ -1,0 +1,119 @@
+toc{Simulation Results sec:results
+
+Baseline Scenario sec:baselinesc
+
+The model with the described implementation has been tested on the Sioux-16 network with a flow capacity scaling 0f $70\%$ to allow for a reasonable amount of congestion.
+
+The travel disutility parameter has been chosen to be zero, as is the travel disutility for taking a car in Sioux-16. The reason behind this is that there are numerous studies indicating positive and negative effects of autonomous vehicles, so it is hard to decide whether the perception of AVs will tend towards one side or the other compared to cars.
+
+The constant disutility for cars in the Sioux-14 scenario has been computed by combining the travel disutility for 10min walking (as to account for getting to and from a parking lot) and the monetary disutility for paying \$6 for parking. For the AVs in this simulation it has been assumed that there is no such additional cost, but a monetary fee per AV trip. This assumes that a fictious operator already included the costs of parking into the pricing scheme (which is reasonable taking the values form actual taxi services).
+
+Since the values in Sioux-14 are based on measurements in Sydney, the current maximum charges for taxi trips there have been used as a reference (NSW2016). According to this source an initial charge of \$3.60 has been set as the constant disutility per trip, while the monetary distance factor for AVs has been set to \$2.19 per km.
+
+Finally, the disutility for waiting for an AV has been assumed to be the same as the waiting disutility for public transport from Sioux-14, which itself is just a vague assumption (Chakirov2014), but at least allows for a systematic comarison.
+
+table[] Baseline Scenario Parameters tab:baselineparams tabular{@{}lll@{}} av = -trav,av = trav,car$            & $0.0$ car = 2.19 wait,av = wait,pt$            &  $-0.18$              tabular table
+
+Using these parameters, which are summarized in [Reference], the scenario has been simulated until relaxation. The following paragraphs will show the respective results in terms of the traffic situation. A sufficiently high number of available AVs ($N=8000$) has been chosen to show how agents make a choice for taking an AV based on their utility evaluation.
+
+[Reference] shows the basic trip statistics of the case where AVs have been introduced to the baseline scenario. It can be seen that with the given utility parameters, the AVs reach a share of around $25\%$ averaged over the day, mainly decreasing the share of public transport and walking, while also attracting some of the former private car users.
+
+Interesting to see is that for public transport and walking agents the travel distances decrease, because relatively long trips in those modes will be replaced by AVs, thus drawing the average down to shorter trips, while it increases for cars. Here, mainly the shorter car trips are replaced by AVs.
+
+These results can also be in [Reference], where the distribution of travel distances by mode is presented. Clearly, AVs act as a competitor towards public transport there, serving mainly the same range of trips with the assumed utility parameters.
+
+figure     figures/modehist_av.pdf     Number of trips for each node by traveled distance     fig:modehist_av figure
+
+In terms of travel times it can be seen that there is a slight increase for the car mode, which stems from the same argument as before. The decrease in travel time for public transport and walking agents is quite significant though. For the walking agents the change is obvious as described before. The decrease for public transport can be explained by the switch of agents, who needed to have long walking distances to the closest bus stop, which is included in the calculation. By only keeping those agents at using public transport, which live nearby a bus stop, the overall travel time decreases quite substantially.
+
+% Please add the following required packages to your document preamble: % booktabs table[] Traffic measures for the relaxed AV baseline scenario tab:withwithoutav tabular{@{}lll@{}} Baseline & With AV Travel Distances {[km{]}} &                   &                  Travel Times {[mm:ss{]}}  &                   &                  Mode Shares               &                   &                  tabular table
+
+[Reference] shows how the mode choice took place after AVs have been introduced. The rows show the original modes, while the percentages indicate how many of the initial users were using the column mode after the introduction of AVs. What can be seen is that $44\%$ of all initial public transport users and $56\%$ of all walking people opted for taking an AV, while only $14\%$ of car users switch modes. This again shows that with the baseline parameters, AVs rather work as a competitor against public transport while additionally drawing new adopters from the walking people. Therefore this scenario represents the rather unwanted case where AVs actually lead to a less optimal situation on the road, leading to more congestion and less use of collective transportation.
+
+% Please add the following required packages to your document preamble: % booktabs table[] Migration matrix showing which agents switched from one mode to another: The rows resemble the initial choices of the agents, while the colums resemble the mode choice after the introduction of AVs. The percentages denoted how many users of the original mode switched to another option. tab:basemodeshares tabular{@{}lrrrr@{}} tabular table
+
+The waiting times for AVs are on average around 04:40 min in the morning peak and 02:55 min in the afternoon, while the daily average lies at 01:40 min. A more detailed analysis of waiting times is given in [Reference].
+
+In terms of travel distances the total amount of kilometers driven increased from around 424,000 km in the baseline to 553,000 km in the AV scenario. The amount of kilometers driven by AVs is 162,500 km from which around 37,800 are for the purpose of picking up passengers, i.e. they are unoccupied while covering this distance, which is roughly $23\%$. This is around half compared to ordinary taxis with 52\% as stated in recent statistics for Oslo (Norway2015) or around 50\% in Barcelona (Amat2014).
+
+Finally, [Reference] shows the states of the AVs during the day. While the lines show how many AVs are currently performing either a pickup or dropoff task, i.e. being ``en tour'', the shaded areas show how many passengers have been picked up or dropped off at at certain time of the day. In this baseline scenario, only around 3000 cars are actually active of the available 8000, so from the perspective from an AV operator the scenario would not be an ideal case, because the usage of the AVs is not nearly close to saturation.
+
+figure     figures/avwork.pdf     Activities of AVs during the day in the relaxed (8000 AVs) AV baseline scenario.     The solid graphs show the number of vehicles, which are ``on tour'', while the     shaded area denotes the number of pickup and dropoff interactions with the     passenger.     fig:avwork figure
+
+Such a case is depicted in [Reference]. It shows the states of the AVs during the day if only 1000 of them are available. Shaded areas indicate those times of the day where the dispatchment mode changes from oversupply to undersupply, where there are more requests than available AVs. At those peak times, one can see that the number of active AVs goes into saturation. The number does not go to 1000 exactly, since only driving AVs are measured, whereas some might be in the 120s pickup or 60s dropoff activities.
+
+figure     figures/avwork_low.pdf     Activities of AVs during the day in the constrained (1000 AVs) AV baseline scenario.     The show the number of vehicles, which are ``on tour'', while the     shaded area denotes times where the undersupply dispatchment mode is active.     fig:avwork_low figure
+
+Compared to the high supply case, the share of AV trips drops from 25.19\% to 18.92\%. While the travel time stays roughly the same for the AV mode, the average distance increases slighly from 2.94km to 3.18km, indicating a shortfall of short trips. Around half the amount of private car users switch to AVs (6.65\%, before 13.69\%); for public transport users the decrease is less significant from 44.29\% to 40.29\%. From that one can conclude that the attractiveness of AVs for private car users is decreasing substantially with a constrained supply, while the induced longer waiting times seem to be tolerable by former public transport users.
+
+figure     figures/traveldistances.pdf     Comparison of total travel distances in the low and high supply scenarios.     fig:traveldistances figure
+
+From an environmental perspective, this scenario is worse than the former one. While car users continue using their private vehicles, public transport users switch to additional cars on the road. In terms of distance ([Reference]), the total amount of kilometers driven increases further because of an increase in excess travel distance of the AVs. Since less agents are using the service, the vehicles have to cover longer distances to get to the next customer. Such a case is disadvantageous for the service operator, so it will be interesting to see how the additional costs of excess milage affect the overal economic evaluation of the provider ([Reference]). The next chapter will give a more detailed relation of the supply level on the total traveled distance.
+
+Supply Analysis sec:waitingtimes
+
+[Reference] shows the relation of travel distance and supply in a more detailed way. At around 1000 vehicles, there is a peak of the net driven distance in the network (black), which is relaxed if the supply is increased. The stable added number of kilometers is then around 120,000km. However, the peak is only 40,000km bigger than this value, which itself is a quarter of the initial 400,000km in the base scenario. Looking at the red graph, which shows the added miles of empty drives in the AV services compared as an offset to the total nubmer of AV miles, one can see that it shows the same peak, i.e. the excess milage is responsible for the increase in total travel distance. In this regard the service operator and public administration would have the same priority to avoid this peak (in terms of profit one one side and regarding environmental policy and congestion on the other).
+
+figure     figures/excessdistance.pdf     Evaluation of the total added travel distance of all vehicles compared     to the base scenario without AVs (black) and excess driving distance for AVs     for the respective supply (red).     fig:excessdistance figure
+
+In terms of waiting time it has been found that per 1000 AVs around 4\% of initial car trips in the scenario could be replaced with static demand in [Reference]. Looking at the waiting times on top in [Reference] one can see that the mean value as well as the 90\% quantile of the waiting time $t_W$ is under the threshold of 10 minutes, which has been examined before. Furthermore, the middle of [Reference] shows $P(t_W \leq 10 min)$, i.e. the probability of having a waiting time of less than 10 min in the simulated supply scenarios. While this probability clearly decreases with small fleet sizes, it still stays rather high at 90\%. That is the case, because due to high waiting times, less trips are being made. For higher supplies, the quantile finds an equilibirum-like state at around 97\%, which can be interpreted as a measure of how tolerable increased waiting times are in a certain scenario.
+
+Additionally, the bottom plot in [Reference] shows the replaced percentage of trips dependent on the amount of available AVs. Because of the prefernces that are induced through the utility-based learning, considerably less trips are converted to AVs although staying in the waiting time limits. While in the static analysis 5000 AVs can replace 20\% of private car trips, in the dynamic one it is only 15\%. For the static case 60\% are simulated at 15,000 AVs, but here the replacement fraction remains at 15\%. This shows that the usefulness of the mode, which is quantified by the utility, is the restricting factor, despite a large available margin in waiting time efficiency.
+
+figure     figures/waitingsupply.pdf     Top: Mean value and 90\% quantile of waiting time for different supply     levels. Bottom: Cumulative probability of observing a waiting time less than     10 minutes.     fig:waitingsupply figure
+
+Cost Dependencies sec:costs
+
+Intuitively, the behaviour of the utility parameters should be quite clear: If the utility is increased, the AV mode gets more favorable, if it is decreased, less people will use it. However, in such a complex traffic system there are secondary effects, which influence the adaptation of AVs.
+
+[Reference] shows the share of the AV mode in the baseline scenario (top) with different pricing schemes, given through a price per kilometer and a price per trip. For very cheap services, the share reaches 90\%, while for a combination of \$7 per trip and \$3 per kilometer the share drops down to under 10\%. It can be seen that for a very low travel utility (lower left) the theshold in the shares gets steeper, while it dilutes for  very high travel utility (i.e. acceptance) of the AV mode (lower right). This hints on the fact that the more accepted AV technology is in the population, the more people will use it, while the pricing scheme can have a huge impact in adaptation if there is a considerable amount of skepticism towards the technology.
+
+figure     figures/sharegrid.pdf     figures/sharegrid_n05.pdf     figures/sharegrid_p05.pdf     Dependency of the AV mode share on the pricing scheme. Top: Baseline     scenario. Left: Low utility of traveling ($\beta_{trav,av = -0.5$). Right: High utility     of traveling ($trav,av = 0.5$). Shaded areas show parameter combinations     where the waiting time for an AV is shorter than 10 min in 90fig:sharegrid figure
+
+The shaded areas in [Reference] show those parameter combinations, where $P(t_w \leq 10min) \geq 0.9$, i.e. where the probability to wait less than 10 minutes for an AV per trip is higher than 90\%. Taking that as another criterion to assess the performance of an AV service, one can see that it puts a restriction on how low the prices can drop in order to allow for a smooth operation of the service. In fact, if waiting time is a constraint, only moderate shares of AVs can be reached on any level of acceptance.
+
+What needs to be kept in mind here is that no further investigations on the disutility of waiting time has been performed here, but it is rather based on an assumption taken from Chakirov2014. Nonetheless, the result is surprising, since in extreme cases, agents accept a waiting time of 30 minutes or more in 90\% of trips, as can be seen on top in [Reference]. Mainly, this depends on all the utility parameters in the scenario, also the utility of performing an activity, the disutility of using other means of transport and so forth. Accepting such a high waiting time might be an indicator that the utilities in the Sioux scenario should be further improved to lead to better results. However, the interpretation is tricky for very low prices, since they also resemble quite unrealistic situations, where only times are weighed against each other: If there are no monetary costs, a trip in terms of utility costs as much as not performing an activity for the travel time.
+
+Furthermore, the results of the simulation are surprising when looking at the share of public transport on the bottom in [Reference]. The general tendency makes sense: Lower prices lead to lower shares of public transport, because using an AV gets more advantageous. Also, having very high prices, the public transport share stays at its initial baseline level. Nevertheless, one would expect people to react more abrupt to the pricing scheme on the per-trip side than on the per-km side. So far each trip in the Sioux Falls scenario costs \$2. Imposing no per-trip fee for AVs, but different per-km fares should show a smooth transition as can be seen in [Reference]: Due to the distribution of trip distances, the shares of people who pay more on on side and less on the other side when using the per-km fare should change depending on the price and their respective trip distances. On the other hand, if no per-km fare is imposed, but only per-trip payments, the transition should be more abrupt. This effect though might be smoothed out by AVs taking less travel time.
+
+This is only true though if people are able to make rational decisions about the total costs of travel. When looking at the beforementioned plots, one can see that there is are quite linear nivau lines, meaning that if a per-km cost is given, one can easily obtain the per-trip cost in order to stay at a certain level of service. For instance, this means that for the agents, paying \$5 per trip and \$1.60 per km is equal to paying \$3 per trip and \$1.90 per distance. In reality though, the perception of the high per-trip fare might be different to the lower per-km fare, especially compared to the initial \$2 per trip.
+
+figure     figures/waitingtimegrid.pdf     figures/ptsharegrid.pdf     Top: 90\% quantile of the waiting time in the baseline scenario with different     pricing schemes. The scale is truncated at 30 minutes. Bottom: Share of public transport     trips. Shaded areas indicate not completely relaxed simulation runs with stuck agents.     fig:moregrids figure
+
+Combining the results of this section, it becomes apprent that in the given scenario, also the share of public transport has a lower bound if a specific service level in terms of waiting time should be maintained. On the other hand, the introduction of AV services will diminish the share of public transport in any case. As one conclusion it can be therefore stated that without any policy-based incentives, it is not possible to maintain the level of public transport while motivating prviate car owners to switch to AVs.
+
+Another point that has to be taken into account regarding these considerations is the profitability of the service for the operator, which will be subject of the next section.
+
+Economical Analysis sec:economics
+
+The operator model for the net income $z$ proposed in this thesis can be stated as follows:
+
+equationaligned z &= p_{km dropoff + p_{trip} trips}_{Gross Income}\$6 \cdot n_{veh + c_{pd} veh + d,car total}_{Expenses} eq:step1 alignedequation
+
+On the income side of the operator there is the total distance of dropoff (i.e. occupied) trips $d_{dropoff}$, multiplied by the price per km and the number of AV trips $n_{trips}$, multiplied by the price per trip. The expense side has been modeled to be comparable with the car mode in the Sioux-16 scenario. It involves a cost for parking (pd$ is introduced for each supplied AV taxi.
+
+That cost has been modeled as follows: Chen15 states predictions of (electric) AV taxi prices of around $c_{veh} = max = 370,000 km$. From the simulation the average driven distance of one day is known as $d_{avg} = d_{total} / n_{veh}$ per vehicle. Those values can be used to obtain a vehicle lifetime, assuming that the amount of kilometers driven stays constant over the lifetime $\tau$:
+
+equation d_{avg}{d_{total} / 1d} = km{km/d} equation
+
+Then the costs per vehicle per day can be stated as:
+
+equationaligned c_{pd} &= c_{veh}{avg c_{veh}{d_{max}} avg d_{total}{n_{veh}} alignedequation
+
+with
+
+equation \${km}. equation
+
+Inserting this equation into [Reference] effectively cancels out the number of available AVs from the investment costs and integrates them into the per distance costs:
+
+equationaligned z &= p_{km dropoff + p_{trip} trips}_{Gross Income}\$6 \cdot n_{veh + (d,car) total}_{Expenses} eq:step1 alignedequation
+
+Therefore the net income is characterized by a complex relation of the total distance driven, the occupied distance, the number of cars and the number of AV trips. Applying this model to the previously introduced pricing scheme map gives the result in [Reference]. For very low prices the service clearly is not profitable in the proposed model, while it is possible to maintain the service in a moderate price range. In fact, the area with most profit is covered by the formerly introduced condition on waiting times (hatched area). However, if a share of 15\% of public transport share should be maintained, the operator would need to offer the service in the crossed area. There the profit is actually decreasing because of a smaller number of users.
+
+For the baseline scenario the operator scenario has been tested with different supply levels. The results in [Reference] show that over the whole range of AVs there the service is profitable, especially at 4000 AVs. Over the whole depicted range the constraints on waiting time and public transport are fulfilled. In that sense those scenarios are quite optimal cases, where the share of public transport stays above 15\%, the waiting times are usually less than 10 minutes and the operator has a large margin. Incorporating the results from [Reference] the right-most cases are the best, because additionally the overall excess milage is smallest.
+
+The large margin is an indicator that the baseline scenario is actually a setup that could ``work'' in a city similar to the Sioux Falls network. Contrary to the financial analysis in Chen15, here infrastructure costs have not been included in the analysis, which could be covered by that profit of the operator.
+
+figure     figures/netincomegrid.pdf     Net income of the AV operator. The shaded areas represent acceptable     waiting times (bigger area) and public transport mode shares of more than     15\% (smaller area).     fig:netincomegrid figure
+
+figure     figures/revenuesupply.pdf     Dependency of the operator net income in the baseline scenario on     the number of supplied AVs.     fig:revenuesupply figure 

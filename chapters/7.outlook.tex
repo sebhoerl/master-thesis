@@ -2,20 +2,30 @@
 \label{sec:outlook}
 
 During the course of this thesis a versatile and extentable basis model for the
-simulation of autonomous vehicles has been developed. Many topics in this field,
-which would be interesting to investigate, were not part of the scope of this thesis.
+simulation of autonomous vehicles has been developed. Many topics in the field
+which would be interesting to investigate were not part of the scope of this thesis.
 The following sections will present the most important and interesting ones and
 give directions on how to simulate them with the framework. Likewise, these sections
 also give an overview about critical points, which are not taken into account in
 the previous results, but could change the overall picture significantly.
 
-\subsection{Recharging Infrastructure}
+Four different aspects will be put into focus:
+
+\begin{itemize}
+\item Extensions of the infrastructure
+in the model, which would account for what needs to be done to maintain the AV
+service in a more realistic and/or efficient way,
+\item the interaction with the AV service, widening the possibilities that one
+or multiple agents have to take advantage of the new travel mode, and
+\item extensions to the current demand simulation.
+\end{itemize}
+
+\subsection{Infrastructure Extensions}
 
 Since autonomous vehicles in general will take great advantage of the ongoing
 electrification in the automotive industry, the availability of the respective
-infrastructure is one factor, which can determine how fast the adaptation of AVs
-will progress \todo{cite sth}.
-
+infrastructure is one factor which can determine how fast the adaptation of AVs
+will progress \citep{Burmeister2016}.
 Given the right amount of resources to create such an infrastructure, a big question
 that arises is how many recharging facilities are needed and where they should begin
 located in order to serve certain sizes of AV fleets \citep{Chen2015}. Furthermore, how can a combined
@@ -26,76 +36,28 @@ As a first step one could assume that AVs recharge at dropoff locations, where t
 are artificially put to rest for a certain minimum idle time in order to simulate
 the recharging process. This would already lead to results on the customer acceptance
 side, but would ignore effects on congestion if AVs would actually need to take long
-trips to the next charging facility.
-
-Previous studies using MATSim already gave interesting results on the implementation
-of private EVs \todo{cite EVs Berlin} in Berlin with distributed charging facilities
-over the network. Such research could be combined with the AV framework developed here.
-The modular AgentFSM component would it make easy to add specific new points in the
-state chains of an AV to drive to a charging facility.
-
-Then again, the simulation framework could be used to get insights in which scheduling
+trips to the next charging facility. Previous studies using MATSim already gave interesting results on the implementation
+of eletrified taxis in Berlin with distributed charging facilities
+over the network \citep{Bischoff2014}. Such research could be combined with the AV framework developed here.
+The modular AgentFSM component would make it easy to add specific new points in the
+state chains of an AV to drive to a charging facility. Then again, the simulation framework could be used to get insights in which scheduling
 strategies would be optimal for an AV fleet if recharging has to be taken into account.
 
-\subsection{Shared Trips}
+Another idea to improve the simulation is to introduce means of simulating maintenance
+and parking. So far it has been assumed that autonomous vehicles will reside where the last
+dropoff has taken place. This assumption, especially in heavily packed cities, is
+quite optimistic, since parking space might be rare. In consequence, the driven
+kilometers per AV in the unoccupied state could be quite off the actual distance.
+More mileage would be needed to find a parking space in between tasks.
+This rises a whole range of questions on how an optimal AV scheduling would
+look like, maybe depending on the demand level, it might be even interesting to
+run  studies on whether the search for parking space might be inferior
+to roaming around.
 
-One obvious advantage of AV fleets is, that up to five people could be transported
-in ordinarily shaped cars and even more in autonomous minibusses or full-sized busses.
-Intelligent routing and scheduling algorithms would make it possible to pick up passengers
-at arbitrary locations, not being bound to a fixed public transport schedule.
-
-Again, due to the extensible structrue of the AV extension, it would be easy to
-add such behaviour in principle. However, the problem of optimizing the trips of
-more than one passenger, probably while already on a ride, is a highly complex
-problem and acceptable heuristics are still an important research subject.
-
-Adding such functionality to the AV framework would make it possible to test such
-strategies in near-realistic scenarios and measure the performance of different
-heuristics.
-
-\todo{some citations here}
-
-\subsection{The Last Mile Problem}
-
-Autonomous vehicles are likely to relax the last mile problem, where people are not
-motivated to opt for public transport, because the last mile from the transport
-facility to their home is too long. An AV could bridge this distance, maybe being
-prescheduled to pick up the passenger according on the current expected arrival
-times.
-
-Implementing this behaviour would need only small changes in the MATSim framework.
-Generally, a public transport trip is generated as three legs: One \texttt{transit\_walk}
-leg in order to get to the stop facility, one \texttt{pt} leg for the actual residual
-time in the bus or train and another \texttt{transit\_walk}. A very easy first attempt
-would be to replace some of the \texttt{transit\_walk} legs during the planning
-phase with \texttt{av} trips and a quite convincing simulation of AVs feeding
-public transport lines would be set up.
-
-A probable requirement for this to work well would be to have prescheduled AVs,
-which are more or less likely to arrive at a prescheduled time.
-
-\subsection{Prescheduled AVs}
-
-Prescheduled autonomous vehicles would be easy to implement in the existing infrastructure.
-In fact, test have already be done, but abandoned due to the fact that in a first
-approximation delays from the scheduling can be modeled using worse utility values
-for the waiting times. At least this would lead to comparable results on the customer
-acceptance side.
-
-In the current state, the AV framework fully supports such prescheduled trips, though
-their impact has not been investigated in the scope of this thesis. As shown in
-figure \todo{reference}, where the state diagram of the AV was depicted, a ``Waiting''
-state is already included, which would make an AV, which arrives early at a pickup
-location, wait for the passenger.
-
-\subsection{Intelligent Repositioning}
-
-A big field of research on taxi services in general is how to reposition available
-taxis while they are not in service. This means that before peak hours taxis could
-be intelligently moved to likely pickup positions and thus minimize the waiting
-time for customers, thus increasing the acceptance while at the same time reducing
-operator costs because less unoccupied miles might be travelled (if the algorithm
-is effective).
+This could be done in combination with intelligent repositioning, where in between peak
+hours taxis could be intelligently moved to likely pickup positions and thus minimize the waiting
+time for customers, increasing the acceptance and reducing
+operator costs at the same time because less unoccupied miles might be travelled.
 
 With the parallelization of customer trips the presented framework already shows
 by example how such an algorithm could be incorporated into the existing infrastructure
@@ -103,68 +65,85 @@ without having too much impact on the computation times. In general, doing ``som
 intelligent repositioning should always be more beneficial than doing none. In
 this regard, the repositioning could be computed in parallel to the ongoing
 traffic simulation, while still offering the ability to restrict it if it slows
-down the general computation of MATSim.
+down the main loop of MATSim.
 
-Alternatively, repositioning could of course be run serially and thus arriving
-at complete heuristic or optimized solutions.
+\subsection{Usage and interaction with the AV service}
 
-\subsection{Parking}
+The AV service in the developed model so far is very basic in the way customers
+are able to interact with it. One obvious advantage of AV fleets is, that up to five people could be transported
+in ordinarily shaped cars and even more in autonomous minibusses or full-sized busses.
+Intelligent routing and scheduling algorithms would make it possible to pick up passengers
+at arbitrary locations, not being bound to a fixed public transport schedule.
 
-So far it has been assumed that autonomous vehicles will reside where the last
-dropoff has taken place. This assumption, especially in heavily packed cities, is
-quite optimistic, since parking space might be rare. In consequence, the driven
-kilometers per AV in the unoccupied state could be quite off the actual distance
-that would be needed to get to the next pickup location, but also to find a parking
-space in between.
+Due to the extensible structrue of the AV extension, it would be easy to
+add such behaviour in principle. However, the problem of optimizing the trips of
+more than one passenger, probably while already on a ride, is a highly complex
+problem and acceptable heuristics are still an important research subject.
+Adding such functionality to the AV framework would make it possible to test such
+strategies in near-realistic scenarios and measure the performance of different
+heuristics.
 
-Again, this rises a whole range of question on how an optimal AV scheduling would
-look like, maybe depending on the demand level, it might be even interesting to
-run preliminary studies on whether the search for parking space might be inferior
-to roaming (and this towards intelligently chosen locations).
+Additionally, autonomous vehicles are likely to relax the last mile problem, where people are not
+motivated to opt for public transport, because the last mile from the transport
+facility to their home is too long. An AV could bridge this distance, maybe being
+prescheduled to pick up the passenger according to the current expected arrival
+times.
 
-\subsection{Heterogeneity}
+Implementing this behaviour would need only small changes in the MATSim framework.
+Generally, a public transport trip is generated as three legs: One \texttt{transit\_walk}
+leg in order to get to the stop facility, one \texttt{pt} leg for the actual residual
+time in the bus  and another \texttt{transit\_walk}. A first attempt
+would be to replace some of the \texttt{transit\_walk} legs during the planning
+phase with \texttt{av} trips, which could already lead to a convincing simulation
+of AVs feeding the public transport network.
+A probable requirement for this to work well would be to have prescheduled AVs
+to give a higher reliability on these connections.
 
-Recently, efforts have been made to diversify the population in MATSim simulations.
-This means that people might be constrained due to age or income to use certain means
-of transport. Combining the simulation of AVs with the introduction on heterogeneity
-(as previously done for the Sioux Falls scenario) could give insights on how the
-availability and pricing of AVs affects the distribution of acceptance among diverse
-social groups in a city.
+Prescheduled autonomous vehicles would be easy to implement in the existing infrastructure.
+In fact, test have already been done, but abandoned due to the fact that in a first
+approximation delays from the scheduling can be modeled using worse utility values
+for the waiting times.
+In the current state, the AV framework fully supports such prescheduled trips, though
+their impact has not been investigated in the scope of this thesis. As shown in
+figure \cref{fig:avstates}, where the state diagram of the AV is depicted, a ``Waiting''
+state is already included, which would make an AV which arrives early at a pickup
+location wait for the passenger.
 
-\subsection{Adaptive Pricing Strategies}
+\subsection{Demand Analysis}
 
-Related to this are adaptive pricing strategies. Once it is established, which disadvantages
-might be introduced by AVs (such as less accessibility to public transport for some social or
-spatially remotely located groups), research can be done on how to even out those
-differences by applying pinpointed pricing strategies. \Citep{Chen16} suggests
-\todo{there are some interesting options, just name them here}
-
-In order to ``free'' the city center from too much congestion one could for instance
-in the Sioux Falls scenario put high monetary fees on using the streets within the
-highway belt for private cars, while in parallel increasing the likelihood for AVs
-to use the highways. This way one could try to move traffic to the highways, then
-taking a direct trip to the workplaces in a perpendicular way.
-
-Experiments like this are ready to be done with the existing simulation framework
-by adding custom scoring functions for private cars and autonomous vehicles.
-
-\subsection{Spatial Dependence}
-
-Another intereting point is the spatial dependence in the simulation. On one side,
+An intereting point in the simulation is the spatial dependence. On one side,
 it would be interesting to investigate where AV users live, maybe indicating that
-on specific pricing strategies, people from the suburbs prefer cars, while other
+on specific pricing strategies, people from the suburbs prefer AVs, while other
 strategies might encourage people living in the center to use them.
 
-An important point related to this is the initial distribution of AVs at the beginning
-of the daily simulation. As described above, here AVs are distributed dependent on
+Heavily related to that is the initial distribution of AVs at the beginning
+of the daily simulation. As described before, AVs are currently distributed dependent on
 the population density, though that might not be the best approach. Especially
 if one wants to encourage suburbians to use AVs, the density there should be higher.
 
-In that regard it would also be interesting to investigate how the initial conditions
+In that regard it would be beneficial to investigate how the initial conditions
 in the MATSim simulation influence the result on an abstract level. For the case of
-AVs, having initial plans to use AVs for a lot of center people, but not for people
+AVs, having initial AV plans mainly assigned to agents from a city center, but not for people
 from the suburbs, the relaxed state might settle down in exactly this condition.
 However, if AVs are mainly distributed in the suburbs in the initial plans, the
 main user group might stay there, just because during the simulations the waiting
 times are shorter in either case and therefore these people might stick to their
-initial plan decisions.
+initial plan decisions. Therefore, a thorough investigation of the distribution
+behavior of the algorithm would be very interesting.
+
+Furthermore, the research in this thesis has shown that without any incentives, AVs might lead
+to adverse effects, which should be corrected by intelligent policy decisions. \Citet{Chen16} suggests
+interesting approaches of incentivizing AV usage. In order to ``free'' the city center
+from too much congestion one could for instance in the Sioux Falls scenario put high monetary fees on using the streets within the
+highway belt for private cars, while in parallel increasing the likelihood for AVs
+to use the highways. This way one could try to move traffic to the highways, then
+taking a direct trip to the workplaces in a perpendicular way.
+
+Experiments like these are ready to be done with the existing simulation framework
+by adding custom scoring functions for private cars and autonomous vehicles.
+
+Finally, efforts have been made recently to diversify the population in MATSim simulations \citep{Chakirov2015}.
+This means that people might be constrained or inclined due to age or income to use certain means
+of transport. Combining the simulation of AVs with the introduction of that heterogeneity
+could give insights on how the availability and pricing of AVs affect the distribution
+of users in terms of a richer set of social variables.
