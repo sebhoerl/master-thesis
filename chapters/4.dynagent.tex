@@ -66,8 +66,8 @@ an existing multi-modal scenario, where the evolutionary learning is necessary
 for the agents to arrive at their quasi-optimal mode choices. So if
 \citet{Bischoff2016} mentions computational times of 20h for a large number of agents,
 it is a measure for one iteration of the evolutionary algorithm. For the scenarios
-that will be tested here, iterations still do not reach a satisfactory
-equilibrium, although having a theoretical computation time of 2000h already.
+that will be tested here, with only ten iterations a satisfactory
+equilibrium cannot be reached, although having a theoretical computation time of 200h already.
 
 Measurements have been made to determine, how much the simulation of an idle agent,
 which always stays in one activity, would cost regarding execution time
@@ -222,7 +222,7 @@ quite inefficient but sufficient to do investigations in terms
 of computation time for the two implementations since the behavior is equal and
 easily understandable.
 
-Simulations with $n=2000, 4000, 8000$ have been done on the Sioux-14 scenario. What can be seen in \cref{fig:dvrpfsm}
+Simulations with $n=2000, 4000, 8000$ AVs have been done on the Sioux-14 scenario. What can be seen in \cref{fig:dvrpfsm}
 is the number AV legs in the simulation and the associated computation
 time. For a large range, the implementation using AgentLock/AgentFSM (solid)
 is much faster than the corresponding DVRP implementation (dashed). In fact, for $n=8000$
