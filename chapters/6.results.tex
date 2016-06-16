@@ -2,10 +2,30 @@
 \section{Simulation Results}
 \label{sec:results}
 
+Once the simulation model had been established, simulation runs with carefully
+defined parameters have been performed. The following sections will give an
+overview about the simulation results.
+
+First, a baseline scenario will be defined with the corresponding utility parameters.
+The resulting trip statistics and mode choices will be analyzed (\cref{sec:baselinesc}).
+In \cref{sec:waitingtimes} different levels of supply will be examined and their
+effects on the overall net mileage and waiting times will be shown. \Cref{sec:costs}
+shows relevant traffic statistics, such as the AV mode share, in dependency on
+the pricing scheme, while \cref{sec:economics} will introduce an operator model
+and analyze the profitability of the AV mode from a service provider perspective.
+
+The simulations performed in this chapter have been computed over 500 iterations,
+with the innovation of agents' plans being turned off after 420 steps. Generally,
+this is a generous setup, since relaxation is usually reached after around 200
+iterations. In terms of computation time, the increase was found to be linearly
+dependent on the number of AV legs, with an increase of $80\%$ per 100,000 legs
+compared to the baseline Sioux-16 scenario without AVs.
+
 \subsection{Baseline Scenario}
 \label{sec:baselinesc}
 
-The model with the described implementation has been tested on the Sioux-16 network
+The model with the implementation that has been described in the previous chapters
+has been tested on the Sioux-16 network
 with a flow capacity scaling of $70\%$ to allow for a reasonable amount of congestion.
 
 The travel disutility parameter has been chosen to be zero, as is the travel
@@ -25,7 +45,10 @@ pricing scheme (which is reasonable taking the values from actual taxi services)
 Since the values in Sioux-14 are based on measurements in Sydney, the current
 maximum charges for taxi trips there have been used as a reference \citep{NSW2016}. According to this
 source, an initial charge of \$3.60 has been set as the constant disutility per trip, while
-the monetary distance factor for AVs has been set to \$2.19 per km.
+the monetary distance factor for AVs has been set to \$2.19 per km. This pricing
+scheme has been chosen to allow for a comparison with a service that exists in
+reality. As will be shown later on, this setup leads to a surprisingly high share
+of the AV mode.
 
 Finally, the disutility for waiting for an AV has been assumed to be the same as
 the waiting disutility for public transport from Sioux-14, which itself is just a
@@ -58,7 +81,11 @@ an AV based on their utility evaluation.
 AVs have been introduced to the baseline scenario. It can be seen that with the
 given utility parameters, the AVs reach a share of around $25\%$ averaged over
 the day, mainly decreasing the share of public transport and walking while also
-attracting some of the former private car users.
+attracting some of the former private car users. Given the quite expensive
+price structure for the AV mode, this result is surprising and likely a result
+of the calibration of the existing parameters from the Sioux-14 scenario, which
+might only be consistent in themselves. Nevertheless, comparisons to this AV baseline
+scenario allow for qualitative conclusions regarding the simulation outputs.
 
 Interesting to see is that for public transport and walking agents the travel
 distances decreases because relatively long trips in those modes will be replaced
@@ -174,6 +201,22 @@ increase when using the AVs, indicating that the monetary benefit of using the A
 instead of going on a private car trip (and paying for parking) is stronger than
 the desire to have a minimal travel time.
 
+From the utility parameters, one can equate the resulting utility of
+a private car and an AV trip with the same distance:
+
+\begin{equation}
+C_{car} + \beta_m \cdot \gamma_{car} \cdot d = C_{av} + \beta_m \cdot \gamma_{av} \cdot d
+\end{equation}
+
+Solving for the variable distance, one reaches at a critical distance, at which
+AV trips should get unfavorable, which is:
+
+\begin{equation}
+d_{crit} = 3.05 km
+\end{equation}
+
+This value can be observed in \cref{fig:changes_modes}, where in the lower plot
+a strict barrier can be seen at this distance.
 
 \begin{figure}
     \centering
@@ -317,7 +360,7 @@ effects, which influence the adaptation of AVs.
 
 \Cref{fig:sharegrid} shows the share of the AV mode in the baseline scenario (top)
 with different pricing schemes, given through a price per kilometer and a price
-per trip. For very cheap services, the share reaches 90\%, while for a combination
+per trip. For near zero cost services, the share reaches 90\%, while for a combination
 of \$7 per trip and \$3 per kilometer the share drops down to under 10\%. It can
 be seen that for a very low travel utility (lower left) the threshold in the shares
 gets steeper while it dilutes for  very high travel utility (i.e. acceptance)
@@ -473,8 +516,9 @@ this model to the previously introduced pricing scheme map gives the result in
 \cref{fig:netincomegrid}. For very low prices the service clearly is not profitable
 in the proposed model, while it is possible to maintain the service in a moderate
 price range. In fact, the area with most profit is covered by the formerly introduced
-condition on waiting times (hatched area). However, if a share of 15\% of public
-transport share should be maintained, the operator would need to offer the service
+condition on waiting times (hatched area). However, from an administrative perspective,
+one might also want to maintain a certain share of public transport. Here, a arbitrary
+share of 15\% is chosen, which should be maintained. In that case the operator would need to offer the service
 in the crossed area. There the profit is decreasing because of a smaller
 number of users.
 
@@ -509,61 +553,3 @@ included in the analysis, which could be covered by that profit of the operator.
     the number of supplied AVs.}
     \label{fig:revenuesupply}
 \end{figure}
-
-\subsection{Summary}
-
-In the previous chapters the quantitative results of the AV simulation have been
-demonstrated in detail. However, the simulation at hand is by nature more suited
-for giving qualitative insights into the traffic system rather then quantitative
-since it is based on a virtual test scenario. The following paragraphs will
-summarize the beforementioned results and give a qualitative overview of the
-findings, putting a focus on the main subject of the thesis: The interaction of
-the new travel mode with the established means of transport.
-
-One of the first results, which could be obtained, is that AVs in the test
-scenario will lead to an increased overall milage, which is an adverse effect
-looking from an environmentally perspective, but is also disadvantageous in
-terms of congestion in the network. Implementation-wise it has been found that
-considerable work needs to be put into intelligent ways of making AVs facilitate
-the existing infrastructure in order to avoid artificially made traffic jams,
-which is a problem that gets crucial with an increasing number of AV trips
-and therefore increasing mileage.
-
-In that regard the introduction of AVs plays against one positive effect of
-public transport: to have fewer vehicles one the road. As could be shown in the
-results, former public transport users are the main adapters of autonomous vehicles
-in the given scenario. While private car users have a financial motivation to switch
-to the AV mode and accept longer travel times, public transport users mainly do
-the switch to reduce their accumulated travel time consisting of the walking
-to the stop facilities and the ride itself, possibly with several line switches.
-
-This choice behavior goes along with a high tolerance for waiting times for the
-AV mode. Because public transport users are used to having a long travel time,
-the performance that could be reached in the given network was clearly enough
-to serve the demand. Nevertheless, the public transport users are not the
-audience that a policy maker would want to attract with AVs. From the findings
-in the simulations one can state (at least for the Sioux network), that it is
-very hard to impossible to maintain a certain level of public transport while
-getting private car owners to using the AV service. In fact, applying pinpointed
-incentive or taxation schemes to the network might be necessary to reach at the
-desired results.
-
-In terms of pricing it has been found that the more inclined people are to spend
-time in an AV, the less constrained the financial structure of the service needs
-to be in order to reach certain AV shares. For the baseline scenario it has been
-found that it is possible to operate an AV service in a profitable way while still
-maintaining a share of \%15 public transport and providing waiting times of less
-than ten minutes. While doing this, there would be a financial margin available
-on the side of the operator to cover necessary infrastructural expenses.
-
-The final conclusion is that AVs without administrative regulation are likely to
-attract public transport users rather than private car owners. Further research
-needs to be done on how AV usage can be incentivized for private car owners to
-reach at a beneficial traffic situation.
-
-Finally, it remains to state that the proposed model is built on a manifold of
-assumptions in the initial Sioux Falls scenario, in the operation of the AV
-agents and on the financial model for the operator. While for the latter future
-predictions will become better and better, it would be highly interesting to apply
-the developed model to a real-world scenario with a higher confidence in the estimated
-utility parameters and relative factors such as current taxi pricing.

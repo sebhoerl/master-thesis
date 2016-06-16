@@ -6,9 +6,10 @@ vehicle technology took great leaps forward, examples being Google's self-drivin
 \citep{Google2016} or Tesla's latest software updates on autonomous parking functionality \citep{Tesla2016}.
 Furthermore, renowned car manufacturers such as Audi recently joined the competition.
 Ambitious tests in real-world conditions are fostered all over the world, examples being Volvo's
-DriveMe project with 100 autonomously driving cars on the highways of Gothenburg \citep{Gothenburg2016}
-and the LUTZ pathfinder project, establishing the use of three autonomous transport pods
-in the city center of Milton Keynes \citep{MiltonKeynes2016}.
+DriveMe project with 100 autonomously driving cars on the highways of Gothenburg \citep{Gothenburg2016},
+the LUTZ pathfinder project, establishing the use of three autonomous transport pods
+in the city center of Milton Keynes \citep{MiltonKeynes2016} and a case study of
+autonomous taxis in Singapore \citep{LTA2016}.
 
 Especially big cities like Singapore could gain a lot from autonomous car technology,
 be it from privately owned cars to publicly owned services. A floating fleet of
@@ -34,13 +35,18 @@ overall movements on the roads will be slowed down \citep{LeVine2015}. Therefore
 on how people would experience shared AV services, replacing a huge percentage of
 contemporary cars with autonomous ones could in fact increase overall congestion.
 
+Another example is the overall travel demand, which might increase with the introduction
+of autonomous vehicles as a consequence of people seeing it as more convenient and
+cost-efficient to other modes. This, in turn, could lead to the aversive effect
+of increased congestion \citep{Litman2014}.
+
 In consequence, while the technological development in autonomous driving already
 came a long way, there is still much demand for research on an upper level, looking
 at the overall economic and societal picture \citep{Silberg2013, SchoettleBrandon2014}. A valuable tool for doing this is the
-use of traffic simulation \citep{Fagnant2014, ITF2014}. Numerous efforts have been
+use of traffic simulation \citep{Fagnant2014, ITF2014, Zachariah13}. Numerous efforts have been
 made in predicting the usefulness of AVs for a city regarding AV supply, i.e.
-answering the question how many shared AVs would be needed to serve the
-existing demand \citep{Bosch2015}. On the contrary, fewer results are available on how the new travel
+answering the question how many shared AVs would be needed to serve an
+existing demand fraction \citep{Bosch2015, Fagnant2015Austin}. On the contrary, fewer results are available on how the new travel
 mode would interact with existing travel options and how customer preferences
 influence the mode choice.
 
@@ -62,21 +68,21 @@ speed while keeping the dynamic detail, which is needed in order to simulate
 intelligently acting AV taxi fleets. At the same time the functionality should be kept
 as versatile and extendable as possible in order to make it possible to gain research
 results on a multitude of factors, which influence the adaptation of autonomous
-vehicles.
+vehicles. Based on these criteria, a new framework for simulating dynamic agents
+has been developed (\cref{sec:dynagent}).
 
 In the scope of this thesis, a basic model of autonomous vehicles, which are transporting one passenger, is developed. Many
 interesting aspects such as shared AVs, AVs for the purpose of feeding
 public transport facilities or simulating a refuel/recharging infrastructure can
-be subject of future research. Since the model relies on data on how likely
+be subject of future research. Since the model relies on how likely
 people are to use autonomous technology, the model at the moment will be mainly
 pointed towards finding qualitative results on the interplay between factors that
-define the traffic situation. However, more and more data on customer preferences, actual experiences of AV technology and pricing information will
-become available over the next years, leading the model to give a more accurate
-and reliable look into the future.
+define the traffic situation. However, customer preferences, actual experiences of AV technology and pricing information will
+become available over the next years.
 
 Given those data sets, the simulation developed in the thesis has the potential
-to act as a valuable tool in transport planning and urban development. It will give
-great aid in the implementation of the needed infrastructure, the development of
+to act as a valuable tool in transport planning and urban development. It will be useful
+in planning for the implementation of the needed infrastructure, the development of
 pinpointed transport solutions and a restructuring of the present traffic network
 to account for the adaptation of autonomous vehicles.
 
@@ -84,13 +90,14 @@ The thesis at hand is structured in four main parts: \Cref{sec:matsim} will intr
 traffic simulation is performed in the MATSim framework and highlight the aspects
 that are important to know for the implementation of autonomous vehicles. \Cref{sec:sioux},
 as another prerequisite for setting up a meaningful simulation, covers the adaptation
-of a readily available MATSim traffic scenario to the increased network resolution,
-which is needed here. In \cref{sec:dynagent,sec:avmodel}, the technical implementation
+of the readily available MATSim scenario of the city of Sioux Falls. In \cref{sec:dynagent,sec:avmodel}, the technical implementation
 of the AV simulation will be explained in detail on two abstraction layers, first
 introducing a new framework for simulating dynamically acting agents in MATSim
 and then creating a model of autonomous taxis based on that. Then, in \cref{sec:results}
 the model will be tested with a variety of parameter configurations, giving
 insights on the general working of the model and predictions of AV usage in the
-artificial Sioux Falls test scenario. Finally, \cref{sec:outlook} will give an outlook on
+artificial Sioux Falls test scenario. Finally,
+\cref{sec:conclusion} provides an overview about the qualitative results, while
+\cref{sec:outlook} will give an outlook on
 a multitude of possible extensions of the model and further research questions that
 can be answered using the model at hand.

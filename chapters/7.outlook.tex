@@ -1,3 +1,76 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+In the previous chapters a simulation of autonomous vehicles in a multi-modal
+traffic network has been developed and assessed. The development started out
+with the extension of the existing Sioux Falls traffic network for MATSim to
+a more finegrained resolution, with comparable traffic characteristics as the
+original scenario.
+
+Furthermore, a the new AgentLock framework for the simulation of dynamic agents in MATSim has
+been developed, providing a decreased computational time for a wide range of
+simulation configurations, compared to the existing DVRP extension of MATSim.
+Additionally, a layer for the easy programming of state-based agents, AgentFSM has
+been created and used in the subsequent simulations.
+
+For the simulation of AVs, a basic agent logic has been shown, a dispatching
+strategy has been assessed and different ways of routing AVs through the network
+have been analyzed.
+
+Finally, behavioral parameters for the simulation of AVs have been defined and
+quantitative results of the AV simulation have been
+demonstrated in detail. However, the simulation at hand is by nature more suited
+for giving qualitative insights into the traffic system rather then quantitative
+since it is based on a virtual test scenario.
+
+One of the first results, which could be obtained, is that AVs in the test
+scenario will lead to an increased overall milage, which is an adverse effect
+looking from an environmentally perspective, but is also disadvantageous in
+terms of congestion in the network. Implementation-wise it has been found that
+considerable work needs to be put into intelligent ways of making AVs facilitate
+the existing infrastructure in order to avoid artificially made traffic jams,
+which is a problem that gets crucial with an increasing number of AV trips
+and therefore increasing mileage.
+
+In that regard the introduction of AVs plays against one positive effect of
+public transport: to have fewer vehicles one the road. As could be shown in the
+results, former public transport users are the main adapters of autonomous vehicles
+in the given scenario. While private car users have a financial motivation to switch
+to the AV mode and accept longer travel times, public transport users mainly do
+the switch to reduce their accumulated travel time consisting of the walking
+to the stop facilities and the ride itself, possibly with several line switches.
+
+This choice behavior goes along with a high tolerance for waiting times for the
+AV mode. Because public transport users are used to having a long travel time,
+the performance that could be reached in the given network was clearly enough
+to serve the demand. Nevertheless, the public transport users are not the
+audience that a policy maker would want to attract with AVs. From the findings
+in the simulations one can state (at least for the Sioux network), that it is
+very hard to impossible to maintain a certain level of public transport while
+getting private car owners to using the AV service. In fact, applying pinpointed
+incentive or taxation schemes might be necessary to reach at the
+desired results.
+
+In terms of pricing it has been found that the more inclined people are to spend
+time in an AV, the less constrained the financial structure of the service needs
+to be in order to reach certain AV shares. For the baseline scenario it has been
+found that it is possible to operate an AV service in a profitable way while still
+maintaining a share of \%15 public transport and providing waiting times of less
+than ten minutes. While doing this, there would be a financial margin available
+on the side of the operator to cover necessary infrastructural expenses.
+
+The final conclusion is that AVs without administrative regulation are likely to
+attract public transport users rather than private car owners. Further research
+needs to be done on how AV usage can be incentivized for private car owners to
+reach at a beneficial traffic situation.
+
+Finally, it remains to state that the proposed model is built on a manifold of
+assumptions in the initial Sioux Falls scenario, in the operation of the AV
+agents and on the financial model for the operator. While for the latter future
+predictions will become better and better, it would be highly interesting to apply
+the developed model to a real-world scenario with a higher confidence in the estimated
+utility parameters and relative factors such as current taxi pricing.
+
 \section{Outlook}
 \label{sec:outlook}
 
@@ -5,27 +78,18 @@ During the course of this thesis a versatile and extentable basis model for the
 simulation of autonomous vehicles has been developed. Many topics in the field
 which would be interesting to investigate were not part of the scope of this thesis.
 The following sections will present the most important and interesting ones and
-give directions on how to simulate them with the framework. Likewise, these sections
-also give an overview about critical points, which are not taken into account in
-the previous results, but could change the overall picture significantly.
-
-Four different aspects will be put into focus:
-
-\begin{itemize}
-\item Extensions of the infrastructure
-in the model, which would account for what needs to be done to maintain the AV
-service in a more realistic and/or efficient way,
-\item the interaction with the AV service, widening the possibilities that one
-or multiple agents have to take advantage of the new travel mode, and
-\item extensions to the current demand simulation.
-\end{itemize}
+give directions on how to simulate them with the framework.
 
 \subsection{Infrastructure Extensions}
 
-Since autonomous vehicles in general will take great advantage of the ongoing
-electrification in the automotive industry, the availability of the respective
-infrastructure is one factor which can determine how fast the adaptation of AVs
-will progress \citep{Burmeister2016}.
+The adaptation of autonomous vehicles will take great advantage of the ongoing electrification in
+the automotive industry. While the ``distance anxiety'', which makes people refrain
+from using electric vehicles due to the limited driving range, is a major barrier
+for the introduction of electric vehicles, autonomous vehicles might be able to
+solve this problem by providing reliable trips through an operator \citep{Burmeister2016, Chen16}. Therefore
+the availability of the respective electrification infrastructure is one factor which has to be taken
+into account when predicting the adaption of autonomous vehicles.
+
 Given the right amount of resources to create such an infrastructure, a big question
 that arises is how many recharging facilities are needed and where they should begin
 located in order to serve certain sizes of AV fleets \citep{Chen2015}. Furthermore, how can a combined
@@ -45,7 +109,7 @@ strategies would be optimal for an AV fleet if recharging has to be taken into a
 
 Another idea to improve the simulation is to introduce means of simulating maintenance
 and parking. So far it has been assumed that autonomous vehicles will reside where the last
-dropoff has taken place. This assumption, especially in heavily packed cities, is
+dropoff has taken place. This assumption is
 quite optimistic, since parking space might be rare. In consequence, the driven
 kilometers per AV in the unoccupied state could be quite off the actual distance.
 More mileage would be needed to find a parking space in between tasks.
@@ -75,10 +139,10 @@ in ordinarily shaped cars and even more in autonomous minibusses or full-sized b
 Intelligent routing and scheduling algorithms would make it possible to pick up passengers
 at arbitrary locations, not being bound to a fixed public transport schedule.
 
-Due to the extensible structrue of the AV extension, it would be easy to
+Due to the extensible structrue of the AV extension, its would be easy to
 add such behaviour in principle. However, the problem of optimizing the trips of
 more than one passenger, probably while already on a ride, is a highly complex
-problem and acceptable heuristics are still an important research subject.
+problem and heuristics are still an important research subject.
 Adding such functionality to the AV framework would make it possible to test such
 strategies in near-realistic scenarios and measure the performance of different
 heuristics.
@@ -108,8 +172,6 @@ their impact has not been investigated in the scope of this thesis. As shown in
 figure \cref{fig:avstates}, where the state diagram of the AV is depicted, a ``Waiting''
 state is already included, which would make an AV which arrives early at a pickup
 location wait for the passenger.
-
-\subsection{Demand Analysis}
 
 An intereting point in the simulation is the spatial dependence. On one side,
 it would be interesting to investigate where AV users live, maybe indicating that

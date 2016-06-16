@@ -3,8 +3,7 @@
 
 Based on the previously presented layers for the simulation of dynamic agents in
 MATSim, a model for the specific case of autonomous vehicle taxi agents is developed
-in the following sections. First, the general behavior is defined, based on a
-logical chain of actions, which an AV agent needs to follow to serve a customer.
+in the following sections. First, the general behavior is defined, which an AV agent needs to follow to serve a customer.
 Furthermore, the questions of how to distribute AVs at the beginning of the simulation
 and how to assign AVs to pending requests in an efficient manner are answered.
 Finally, algorithms for routing AVs through the street network are presented and
@@ -46,7 +45,7 @@ point, the AV will just wait until it receives a new task to pick up another pas
 The states described above fit very well to the distinction of Activities and Legs
 in MATSim as well as to the structure of the AgentFSM framework, which has been
 developed for this purpose. Resulting from this behavioral model, a couple of
-parameters end implementational questions arise, which must be configured accordingly:
+parameters and implementational questions arise, which must be configured accordingly:
 
 \begin{description}
 \item[The Idle behavior] for the basic model just means that the AV will stay at
@@ -87,7 +86,9 @@ for this thesis are:
 
 \begin{description}
 \item[Population Density] The population density is measured in terms of
-how many people are having their ``home'' activity on a certain link.
+how many people are having their ``home'' activity on a certain link, since agents
+will start their first simulated legs on a day from these locations. It should
+be roughly related to the expected number of AV legs from that link.
 \item[AV Density] For each link it is counted how many agents
 have chosen the AV mode for their first leg (the one that is starting from home).
 \end{description}
@@ -108,8 +109,8 @@ itself.
 
 \subsection{Dispatcher Algorithm}
 
-The dynamic dispatching of taxi vehicles is quite a complex scheduling problem,
-which is quite hard to solve or needs numerous assumptions to be feasible. In
+The dynamic dispatching of taxi vehicles is a complex scheduling problem,
+which is hard to solve or needs numerous assumptions to be feasible. In
 general, the problem will be NP-hard, and heuristical solution strategies need
 to be applied if fast solutions are needed. An overview, as well as a proposed
 heuristic algorithm, can be found in \citet{Maciejewski2015, Bischoff2016}.
@@ -127,8 +128,8 @@ algorithm works the other way round: As soon as an autonomous vehicle gets avail
 it is dispatched to the closest request.
 \end{description}
 
-According to the beforementioned papers this strategy gives a near-optimal solution,
-although providing fast computational times.
+According to the beforementioned papers this strategy gives a near-optimal solution
+with fast computational times.
 
 The implementation for this thesis is based on a spatial relaxation of the traffic
 network. This means that a grid with a specific resolution in x and y is fitted
@@ -160,7 +161,7 @@ transforming the to a simple random selection.
 In fact, for some topologies, it might probably be more efficient to use different
 data structures like a binary tree or quadtree to improve the search procedure.
 Also, more elaborate network search algorithms could be used, which make direct use
-of the topology.
+of the topology \citep{ChenSpatial14}.
 
 For the Sioux-14 scenario, it has been tested which impact the choice of the grid
 size has on the results. In \cref{fig:gridsize} one can see, that very high-resolution
@@ -254,10 +255,12 @@ are optimal for topological reasons. By not taking into account any information
 on how congested the links are, more and more vehicles attempt to enter
 them, creating huge traffic jams.
 
-In the top-level MATSim loop, such congestion is mainly avoided by introducing
+In the top-level MATSim loop, such congestion can mainly be  avoided by introducing
 small stochastic and congestion-based alterations to the car-using agents. This way,
 iteration by iteration, such routes are eliminated from their plans because they
-lead to a bad scoring of the respective plans.
+lead to a bad scoring of the respective plans. Furthermore, the traffic situation
+by daytime in the network is measured and used as a basis for planning in subsequent
+iterations.
 
 In the following sections, two more advanced approaches for defining the link speeds
 are presented. First, continuous online tracking of link speeds during the day is
@@ -374,9 +377,13 @@ The overall effect of this model is then as follows: There is a certain increase
 in travel time expected for each link, which depends on its free-flow speed and the time
 of the day. However, especially during peak hours, when the bottlenecks would be a
 critical problem, more variation is added to the expected increases in travel time
-and thus a better variation in the routing is reached. In each case, the expected
-increases are founded on the actual network characteristics of the Sioux-16 network.
+and thus a better variation in the routing is reached.
 
+The expected increases are founded on the actual network characteristics of the Sioux-16 network
+and might be different for other networks. Furthermore, it has not been investigated
+whether different link types might show different statistical properties, which
+is very likely. Establishing a comprehensive statistical model of the decreases
+in link speeds, depending on a greater variety of variables, would be beneficial.
 
 \begin{figure}
     \centering

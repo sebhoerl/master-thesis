@@ -6,22 +6,22 @@ agent-based transport simulation MATSim \citep{Horni2015}. The following section
 will outline how the framework works and where it can be extended to shape it
 towards an autonomous taxi simulation. An overview will be given on which components
 need to be modified and how the final transport situation will result from all
-the different parts that are playing together in MATSim.
+the different parts that make up the simulation.
 
 \subsection{Agent-based transport simulation}
 
 The approach that is used in MATSim is to simulate a virtual population of a city on a per-agent
 timestep-based level. At the beginning of a simulation run, each person in the synthetic
 population has an initial plan of what it is supposed to do during the simulated day. Those
-those plans consist of two elements:
+ plans consist of two elements:
 
 \begin{description}
 
 \item[Activities] have a start and an end time, as well as, depending on the
 respective scenario, certain constraints on when the earliest start or latest
-end time could be, i.e. how much the current values could be alternated to still
+end time could be, i.e. how much the current values could be altered to still
 give a realistic time frame. Furthermore, minimum durations can be defined for
-which and agent has to stay at a certain activity location. Those locations are
+which an agent has to stay at a certain activity location. Those locations are
 given as facilities, which have specific coordinates on the scenario map.
 Usual activities are
 ``home'' (which usually is the first plan element of a day) and ``work''. More
@@ -62,12 +62,12 @@ dedicated traffic network simulation. This simulation moves the agents according
 to the capacity and current congestion from the start node to the end node of the
 respective links. Traffic is not simulated on a micro-level (i.e. the vehicles
 do not have distinct positions along the link) to increase the simulation
-speed. Consequently, congestion on the traffic network is emerging from the single travel
+speed. Consequently, congestion on the traffic network is emerging from the travel
 plans of all the agents. If there are too many agents who try to use one route
 at the same time, the overall congestion will increase.
 
 The actual routes that are being taken by the agents are generated based on the
-fastest path through the network for a certain leg, with a certain amount stochasticity
+generalized least cost path through the network for a certain leg, with a certain amount stochasticity
 added into the pathfinding process in order to avoid artificially created bottlenecks.
 This approach allows the optimization of the plans to be separated from the actual
 simulation of the plans, but is not suitable for the simulation of an AV taxi service,
@@ -76,7 +76,7 @@ demand. Therefore, to simulate dynamic agents for AVs, which are not statically 
 fixed-timed activity or a predefined leg route, significant changes need
 to be made, and some of the computational advantages of the simulation approach
 need to be partly circumvented. This, however, mainly addresses implementational
-details and will be discussed later throughout the thesis in \cref{sec:dynagent}.
+details and will be discussed later in the thesis in \cref{sec:dynagent}.
 
 All steps described above, i.e. the simulation of activities and legs during
 a whole simulation day, are summarized as the ``Mobility Simulation'' or, in short, Mobsim
@@ -85,7 +85,7 @@ of the MATSim framework.
 \subsection{Utility-based scoring}
 \label{sec:utility}
 
-As pointed out in the last section, individual travel decisions might lead to
+As pointed out in the previous section, individual travel decisions might lead to
 waiting times on the network, which then can also lead to late arrivals at the
 designated activity locations, which usually would be disadvantageous in the real
 world. Therefore, it might be beneficial for an agent to reconsider the time and
@@ -94,7 +94,9 @@ would do.
 
 In order to ``know'' whether a plan worked out well or was disadvantageous, the
 single elements need to be weighed and quantified. This is done using the Charypar-Nagel
-scoring function \citep{Horni2015}:
+scoring function \citep[pp. 27]{Horni2015}:
+
+
 \begin{equation}
 S_{plan} = \sum_{q=0}^{N-1} S_{act,q} + \sum_{q=0}^{N-1} S_{trav,mode(q)}
 \end{equation}
@@ -106,7 +108,7 @@ between.
 The marginal utility for the activities, among other factors, depends on how long
 the activity has been performed, whether the agent needed to wait to start it (due
 to an early arrival) or whether it was forced to leave early. For more details
-the complete computation is shown in \citep{Horni2015}.
+the complete computation is shown in \citet{Horni2015}.
 
 For the scope of this thesis the travel utility is more interesting. A basic version
 for a single leg $q$ can look as follows:
@@ -154,8 +156,10 @@ Here, $\beta_{wait}$ is the marginal utility of waiting time, quantifying
 how disadvantageous it is to wait for an AV to arrive.
 
 The utility computations presented here are used in the ``scoring phase'', which
-is taking place in MATSim after one simulation day (in fact, usually 30h are
-used) has been performed. Then all experienced legs and activities are scored, and
+is taking place in MATSim after one simulation day\footnote{A simulated day in
+MATSim can be defined to be longer than 24 hours to ensure that all agents departing
+late at night are given enough time to arrive at their destinations, and thus not
+be penalized for having infinite travel time.} has been performed. Then all experienced legs and activities are scored, and
 each agent is assigned a final score, depending on which further replanning is done,
 as described in the next part.
 
@@ -163,12 +167,12 @@ as described in the next part.
 
 The last step is to make all the agents replan their day
 in order to ``learn'' more optimal plans which
-make sure that they arrive on time at the activity locations and avoid congestion.
-This is done using an evolutionary algorithm in the following way:
+ensure that they arrive on time at the activity locations and avoid congestion.
+This is done using an evolutionary algorithm that works as follows:
 
 Usually, an agent will start out with one quite random plan, go through it during
-one whole day and then get a score for it. Afterward, in some iterations, this
-plan is copied and modified slightly. Those modifications can happen with respect
+one whole day and then get a score for it. Afterward, if the agent is selected in a random draw, it's plan is
+copied and modified slightly. Those modifications can happen with respect
 to start and end times of activities, mode choices for certain legs, etc. So after
 one iteration the agent might already have two plans to select.
 
@@ -181,8 +185,8 @@ favors high scores, better and better choices will be made.
 However, this is done for each and every agent, so while improving the performance
 of one agent's plans, this might effect the performance of other agents negatively,
 which is especially true if one thinks about the example of highly congested roads
-due to too many agents choosing the same route. Finally, though, the algorithm reach
-at a quasi-equilibrium, which in MATSim is usually referred to as the ``relaxed
+due to too many agents choosing the same route. Finally, though, the algorithm reaches
+a quasi-equilibrium, which in MATSim is usually referred to as the ``relaxed
 state'', in which the average score of the used plans stabilizes within a
 reasonable variance.
 
@@ -206,8 +210,12 @@ Finally, one can see the average of all the plans that have been executed
 by the agents in a particular iteration.
 
 The first phase until iteration 100 is the innovation phase, where time and mode
-choices can be made, while it is turned off at iteration 100. There, because now
-the best plans must adapt to the overall situation, the best plans are loosing in utility.
+choices can be made, following which it is turned off at iteration 100. At this point,
+all agents select from their existing stock of plans, stochastically favoring higher
+scores. What was a high-scoring plan during the innovation phase might now perform substantially
+worse, while another plan in each agent's choice set might produce better scores under these newly
+imposed conditions. This change is reflected in the lowering of the average maximum
+plan score and increase of average executed score after 100 iterations in \cref{fig:scorestats}.
 Finally, a quite stable population-wide relaxed state is reached.
 
 \begin{figure}
@@ -229,9 +237,9 @@ Finally, a quite stable population-wide relaxed state is reached.
 
 \subsection{Queue-based simulation}
 
-The heart of the simulation in MATSim is the queue simulation, or more briefly,
-the QSim. This part of the framework is iterating through all the agents that need
-to take action in the current simulation step.
+The heart of the simulation in MATSim is the queue simulation (QSim), which is a
+specific implementation of the beforementioned Mobsim. This part of the framework
+is iterating through all the agents that need to take action in the current simulation step.
 
 Itself, the QSim is split into the handling of agents which are currently performing
 an activity (i.e. are in an idle state in terms of the traffic simulation) and another
@@ -244,16 +252,16 @@ this is the case, the agent is removed from the Netsim and the next agent state 
 
 The result of this computation is either that the agent wants to start a leg, in
 which case he is reinserted into the Netsim, or that he wants to start an activity,
-which will make the agent be added to the activity queue.
+which will add the agent to the activity queue.
 
 This activity queue is the other main component of the QSim. In fact, it is a
 priority queue, where all agents are sorted according to the time at which they
 want to end the next activity. So when adding an agent to the activity queue, it first
-is checked when the activity should be ended and then the agent is inserted at the
+checks when the activity should be ended and then the agent is inserted at the
 corresponding position in the queue.
 
 The processing of this queue in the QSim for each simulation step then works as
-follows: The first element of the queue is looked at and it is checked, whether the
+follows: The first element of the queue is checked, whether the
 agent should already end the activity. If this is not the case, the simulation step
 is already finished. On the other hand, if the activity should be ended now (or
 previously if the time resolution of the simulation is quite high), the agent is

@@ -1,7 +1,15 @@
 \section{Dynamic Agents in MATSim}
 \label{sec:dynagent}
 
-Several approaches have been proposed to allow for dynamic behavior in MATSim.
+The behavior of ordinary agents in MATSim can be described as static in the way
+that they now before one day is simulated how their plans look like. The actual
+departure times and routes through the network can be computed in advance and the
+only element that brings variation are delays in the traffic network due to
+congestion.
+
+Certain participants in the traffic network though need to be simulated in a
+dynamic way, where it is not clear in advance when they should arrive at which locations
+and where those are. Several approaches have been proposed to allow for dynamic behavior in MATSim.
 The decision on which option is best depends mainly on what a
 level of complexity in the behavior is needed.
 
@@ -13,13 +21,13 @@ are deregistered from the list and ``teleported'' to the destination stop as soo
 as the vehicle arrives there. This setup fits very well into the queue based structure
 of MATSim.
 
-An even more dynamic approach is used in the DVRP framework, which will be discussed
+An even more dynamic approach is used in the DVRP (Dynamic Vehicle Routing Problem) framework, which will be discussed
 in the first part of this section. At the time of this thesis and for the specific
 use case of autonomous vehicles, some drawbacks will be shown and finally a new
 abstraction layer for dynamically acting agents will be presented, which has been
 part of the thesis work.
 
-\subsection{DVRP}
+\subsection{DVRP Extension}
 
 The DVRP extension \citep{DVRP12, Horni2015} is designed to provide a level of abstraction to the simulation of
 dynamic transport services, such as taxis. Its general structure is quite flexible
@@ -33,7 +41,7 @@ agents are simulated as described before, dynamic agents (DynAgents) have two
 modifications:
 
 \begin{description}
-\item[Legs] are sent to the conventional Netsim. However, agents have the ability
+\item[Legs] are sent to the conventional Netsim component of the QSim. However, agents have the ability
 to change their paths dynamically, i.e. one can modify the route of the agent
 during the simulation steps and the next time the Netsim wants to move the agent
 or checks whether the agent should arrive at the current link, its response is
@@ -63,11 +71,11 @@ only the QSim was used and not the evolutionary learning of MATSim.
 
 However, in the project of this thesis, autonomous vehicles should be tested in
 an existing multi-modal scenario, where the evolutionary learning is necessary
-for the agents to arrive at their quasi-optimal mode choices. So if
+for the agents to arrive at their quasi-optimal mode choices. So when
 \citet{Bischoff2016} mentions computational times of 20h for a large number of agents,
 it is a measure for one iteration of the evolutionary algorithm. For the scenarios
-that will be tested here, with only ten iterations a satisfactory
-equilibrium cannot be reached, although having a theoretical computation time of 200h already.
+that will be tested here, with only one hundred iterations a satisfactory
+equilibrium cannot be reached, although having a theoretical computation time of 2000h already.
 
 Measurements have been made to determine, how much the simulation of an idle agent,
 which always stays in one activity, would cost regarding execution time
@@ -87,12 +95,15 @@ reach a (highly optimistic) computational overhead of
 T_{sim} = 21.6s \cdot 100 = 36min
 \end{equation}
 
+Therefore one can say, independent of the machine, that the constant polling in
+DVRP causes a non-negligible computational overhead.
+
 Furthermore, while working with DVRP, it has been found that one needs to put
 increased efforts into making the framework compatible with parallelized computation
-in the Netsim, which would have lead to a neglect of a good way to improve the computational
-performance of the simulation if ignored.
+in the Netsim, presenting a substantial barrier to a clear avenue for improving
+simulation performance.
 
-As a summary, one can say, that DVRP allows for a great freedom in simulating
+In summary, one can say, that DVRP allows for great freedom in simulating
 dynamic behavior and its structure and signaling flows are very straight-forward
 and easy to work with. However, for large numbers of iterations, it would
 be beneficial to find more efficient ways for the simulation.
@@ -134,7 +145,7 @@ an activity have been proposed:
 
 The heart of the AgentLock extension is the LockEngine. Whenever it encounters an
 agent that wants to start a blocking or event-based activity, it is removed from
-the simulation and only added back manually or as soon as the
+the simulation and only added back using a specific function call or as soon as the
 event occurs. Then it either is passed to the ordinary Netsim or the next activity
 is started, just as requested by the agent logic.
 
@@ -185,12 +196,12 @@ with the existing parts of MATSim, such as the multi-threaded Netsim.
 
 While the AgentLock extension mainly provides an abstraction layer for the dynamic
 rescheduling of activities and legs, another layer has been developed, which is
-loosely resembling a finite state machine, tailored towards agents in
+loosely resembling a finite state machine \citep[pp. 256]{FSM13}, tailored towards agents in
 MATSim.
 
 In this framework all the activities and legs are predefined states in a finite
 state machine and the transitions from one step to another can either be triggered
-manually (which is the \textit{blocking} lock from above), by time (\textit{time-base lock})
+through a specific function call (which is the \textit{blocking} lock from above), by time (\textit{time-base lock})
 or by an event (\textit{event-based lock}).
 
 The main task of the AgentFSM framework is to encapsulate common programming steps
@@ -214,10 +225,10 @@ The concrete implementation for the autonomous vehicles will be discussed in \cr
 
 An implementation of autonomous vehicles in DVRP has been compared to an implementation
 using the AgentLock framework. A specific number $n$ of
-autonomous vehicles are created and put into a queue. As soon as an agent wants to
-start a leg using an AV, the top element of the queue will drive to that position,
+autonomous vehicles are created and put into a list. As soon as an agent wants to
+start a leg using an AV, the top element of the list will drive to that position,
 pick up the passenger, bring him to the final destination and drop him off. Then
-the AV will be added back to the end of the queue. This dispatching algorithm is
+the AV will be added back to the end of that list. This dispatching algorithm is
 quite inefficient but sufficient to do investigations in terms
 of computation time for the two implementations since the behavior is equal and
 easily understandable.
@@ -257,7 +268,9 @@ could be done, as shown in \cref{fig:threads}. Obviously, though the improvement
 is small, the simulation with two threads performed best. This shows that it is
 an advantage to be able to use the multithreaded Mobsim. Similar results
 have been found for other scenarios. For instance, the optimal number of threads
-for the Singapore scenario has been found to be four \citep{Erath2014}.
+for the Singapore scenario has been found to be four \citep{Erath2014}. More generally, \citet{Dobler2010}
+shows that dependent on the scenario characteristics significant improvements
+can be made using the multi-core simulation.
 
 \begin{figure}
     \centering

@@ -1,0 +1,6 @@
+
+\todo{in general: remove colors from plots, rather use line styles}
+\todo{plots: add measurement points where appropriate}
+\todo{read ortuzar, maybe add a reference to explain this more elegantly}
+\todo{cost plots: y axis Initial cost per ride, same size for different acceptance? maybe not necessary, BUT: same scaling is necessary!!!}
+\todo{cost plots: caption for colorbar values is missing!}

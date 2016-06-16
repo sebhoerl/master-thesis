@@ -33,7 +33,7 @@ of a link and thus a high resolution is needed to avoid unrealistic clustering.
 \end{figure}
 
 On the supply side, there is furthermore a public transport network, which
-consists of 5 lines with bus stops along the arterial roads in a distance of $600m$.
+consists of 5 lines with bus stops along the arterial roads at intervals of $600m$.
 The stops are placed at a distance of $5m$ perpendicular to the road and departures
 from the lines' respective start links take place every 5 minutes.
 
@@ -116,13 +116,13 @@ sections. This removal was done in a couple of steps:
 respective start and end nodes in the new coordinate system.
 \item The network has been searched for sources (nodes that only have outgoing links)
 and sinks (nodes that only have incoming links). Those have been removed, because they
-make no practical sense. This proecdure lead to 53 removed links in total.
+make no practical sense. This procedure led to 53 removed links in total.
 \item One seed node has been defined, which definitely belongs to to the street
-network and then by traversing the all paths from that node, it has been determined,
+network and then by traversing the all paths from that node, it was determined
 which streets belong to the main network. All remaining nodes and links, which have
 become detached from this main network have been removed (11 nodes and 14 links).
 \item Finally, the network has been searched for duplicate links with the exact
-same start and end node. Only the first of those links have been kept, which lead
+same start and end node. Only the first of those links have been kept, which led
 to the removal of 3 duplicates.
 \item In Sioux-14, the links have been split such that there are no connections
 longer than $500m$. This procedure has also been applied to the network at hand,
@@ -191,7 +191,7 @@ known (e.g. for the blue line in the center an approximate position between the
 two lines would be chosen).
 
 In another step, the locations that had been assigned to each line have been
-assigned to the respective links along the line. So for the blue one, the average
+assigned to the respective links along the line. So for the blue line, the average
 points in between would have been assigned to a link underneath for one direction,
 and another stop would be created for the link above. This resulted in a final
 set of stop locations.
@@ -281,6 +281,12 @@ which stay roughly constant for the scenarios. A major difference can be seen in
 the mode shares of walking and public transport legs, where roughly two to three
 percent of the agents in the network switch from the walking mode to public
 transport.
+
+The test simulations with the Sioux-14 network yielded an average computation time
+of $9.37s$ on a test machine, while for Sioux-14 it is increased to $12.31s$. Of
+course on other machines, different computation times will be achieved, but one
+can state that with the same simulation parametres (number of threads etc.), the
+increase in computation time is around $30\%$.
 
 \begin{figure}
     \centering
